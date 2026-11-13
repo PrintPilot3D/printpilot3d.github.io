@@ -31,7 +31,7 @@ const SHOP = {
    Delete its whole { ... } block.
 
    The Phone Stand is a real product (example is false). The other
-   four prints are EXAMPLES. Replace those before you take orders
+   three prints are EXAMPLES. Replace those before you take orders
    for them. You can delete an example, or change its words and
    set example to false.
    ===================================================================== */
@@ -56,17 +56,6 @@ const PRODUCTS = [
     stock: 4,
     icon: "tray",
     blurb: "A little tray with rooms for pens and notes.",
-    example: true,
-  },
-  {
-    id: "cable-clips",
-    name: "Cable Clips",
-    category: "Cables",
-    colour: "Mixed",
-    price: 15,
-    stock: 10,
-    icon: "clips",
-    blurb: "A set of three clips that hold a cable in place.",
     example: true,
   },
   {
