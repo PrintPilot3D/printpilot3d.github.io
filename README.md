@@ -35,6 +35,8 @@ The shop name and WhatsApp number are in the `SHOP` object in `script.js`. The W
 
 The Dubai delivery fee is the `DELIVERY_FEE` number near the top of `script.js`. Change that number to change the price. Pickup stays free.
 
+Card payment stays hidden while `CARD_PAYMENT_LINK` at the top of `script.js` is `""`. Paste a Stripe (or similar) payment link there to show "Card payment online". Do not put bank details on the site.
+
 Orders and custom print requests open WhatsApp. There is no email contact on this site.
 
 ## Files

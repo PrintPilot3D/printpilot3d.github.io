@@ -200,6 +200,21 @@
         <span><strong id="deliveryOptionName">Delivery in Dubai (+15 AED)</strong><small>Added to the total</small></span>
       </label>
     </fieldset>
+    <fieldset class="ship-choice">
+      <legend>How will you pay?</legend>
+      <label class="ship-option">
+        <input type="radio" name="payment" value="cash" checked>
+        <span><strong>Cash on pickup or delivery</strong></span>
+      </label>
+      <label class="ship-option">
+        <input type="radio" name="payment" value="transfer">
+        <span><strong>Bank transfer</strong><small>We'll send bank details on WhatsApp after you order</small></span>
+      </label>
+      <label class="ship-option" id="cardOption" hidden>
+        <input type="radio" name="payment" value="card">
+        <span><strong>Card payment online</strong><small>A pay button appears after you send the order</small></span>
+      </label>
+    </fieldset>
     <label>Name
       <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
     </label>
@@ -220,6 +235,7 @@
     <p class="form-error" id="formError" hidden></p>
     <button type="submit" class="btn btn-wa">Order on WhatsApp</button>
     <a id="orderWaLink" class="fallback" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp did not open? Tap here to send the message.</a>
+    <a id="cardPayLink" class="btn btn-primary" target="_blank" rel="noopener noreferrer" hidden>Pay by card</a>
     <button type="button" class="link-btn" id="clearCart">Clear cart</button>
     <a class="link-btn" href="#custom" id="customFromCart">Custom print request</a>
   </form>

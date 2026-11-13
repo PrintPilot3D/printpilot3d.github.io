@@ -17,6 +17,18 @@ const SHOP = {
 const DELIVERY_FEE = 15;
 
 /* =====================================================================
+   CARD PAYMENT LINK — online card payments
+   ---------------------------------------------------------------------
+   Leave this as "" and the "Card payment online" choice stays hidden.
+   To turn it on, paste a payment link between the quotes. A Stripe
+   link looks like https://buy.stripe.com/your-link — another card
+   service link is fine too. After someone sends the WhatsApp order,
+   a "Pay by card" button opens that link.
+   Do not put bank account numbers on this site.
+   ===================================================================== */
+const CARD_PAYMENT_LINK = "";
+
+/* =====================================================================
    PRODUCTS — the prints for sale
    ---------------------------------------------------------------------
    HOW TO ADD A PRODUCT
@@ -233,6 +245,7 @@ function productArt(p) {
 }
 
 let fulfillment = "pickup";
+let payment = "cash";
 let cart = loadCart();
 
 function cleanItems(raw) {
@@ -272,6 +285,33 @@ function currentFee() {
 }
 function optionLabel() {
   return fulfillment === "delivery" ? `Delivery in Dubai (+${money(feeAmount())})` : "Pickup (free)";
+}
+function cardPaymentLink() {
+  const url = String(CARD_PAYMENT_LINK || "").trim();
+  if (!/^https:\/\/\S+$/i.test(url)) return "";
+  return url;
+}
+function chosenPayment() {
+  if (payment === "transfer") return "transfer";
+  if (payment === "card" && cardPaymentLink()) return "card";
+  return "cash";
+}
+function paymentLabel() {
+  const choice = chosenPayment();
+  if (choice === "transfer") return "Bank transfer";
+  if (choice === "card") return "Card";
+  return "Cash";
+}
+function syncPayment() {
+  const link = cardPaymentLink();
+  const cardOption = $("#cardOption");
+  if (cardOption) cardOption.hidden = !link;
+  if (!link && payment === "card") payment = "cash";
+  document.querySelectorAll('input[name="payment"]').forEach((input) => {
+    const on = input.value === payment;
+    input.checked = on;
+    input.closest(".ship-option")?.classList.toggle("selected", on);
+  });
 }
 
 function renderFilters() {
@@ -391,6 +431,7 @@ function renderCart() {
   $("#buildingInput").required = delivering;
   const optionName = $("#deliveryOptionName");
   if (optionName) optionName.textContent = `Delivery in Dubai (+${money(feeAmount())})`;
+  syncPayment();
   $("#cartItems").innerHTML = lines.length ? lines.map(({ p, qty }) => `
     <div class="ci">
       <div class="ci-thumb ${categoryClass(p.category)}${productImage(p) ? " has-photo" : ""}">${productArt(p)}</div>
@@ -440,6 +481,7 @@ function buildOrderMessage(data) {
     `Option: ${optionLabel()}`,
     `Delivery fee: ${money(fee)}`,
     `Total: ${money(cartTotal() + fee)}`,
+    `Payment: ${paymentLabel()}`,
     "",
     `Name: ${data.name}`,
     `Phone: ${data.phone}`,
@@ -484,6 +526,15 @@ function handleCheckout(e) {
   }
   err.hidden = true;
   showWhatsApp("#orderWaLink", buildOrderMessage(data));
+  const cardButton = $("#cardPayLink");
+  const link = chosenPayment() === "card" ? cardPaymentLink() : "";
+  if (link) {
+    cardButton.href = link;
+    cardButton.hidden = false;
+  } else {
+    cardButton.hidden = true;
+    cardButton.removeAttribute("href");
+  }
   toast("Order message ready — just hit send");
 }
 function handleCustom(e) {
@@ -536,11 +587,19 @@ function init() {
   $("#overlay").addEventListener("click", () => openCart(false));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") openCart(false); });
   $("#orderForm").addEventListener("change", (e) => {
-    if (e.target.name !== "fulfillment") return;
-    fulfillment = e.target.value === "delivery" ? "delivery" : "pickup";
-    $("#formError").hidden = true;
-    saveCart();
-    renderCart();
+    if (e.target.name === "fulfillment") {
+      fulfillment = e.target.value === "delivery" ? "delivery" : "pickup";
+      $("#formError").hidden = true;
+      saveCart();
+      renderCart();
+    }
+    if (e.target.name === "payment") {
+      const value = e.target.value;
+      payment = value === "transfer" || value === "card" ? value : "cash";
+      $("#formError").hidden = true;
+      $("#cardPayLink").hidden = true;
+      syncPayment();
+    }
   });
   $("#orderForm").addEventListener("submit", handleCheckout);
   $("#customForm").addEventListener("submit", handleCustom);
