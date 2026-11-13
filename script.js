@@ -30,9 +30,10 @@ const SHOP = {
    HOW TO REMOVE A PRODUCT
    Delete its whole { ... } block.
 
-   The five products already in the list are EXAMPLES. Replace them
-   with your real prints before you take orders. You can delete an
-   example, or change its words and set example to false.
+   The Phone Stand is a real product (example is false). The other
+   four prints are EXAMPLES. Replace those before you take orders
+   for them. You can delete an example, or change its words and
+   set example to false.
    ===================================================================== */
 const PRODUCTS = [
   {
@@ -44,7 +45,7 @@ const PRODUCTS = [
     stock: 6,
     icon: "stand",
     blurb: "Holds a phone upright on a desk.",
-    example: true,
+    example: false,
   },
   {
     id: "desk-organiser",

@@ -12,7 +12,7 @@ In the repo on GitHub, set **Settings → Pages → Build and deployment → Sou
 
 ## Edit the product list
 
-All prints live in the `PRODUCTS` array near the top of `script.js`. The five prints already there are examples, with drawings made for this site. Replace them with real prints before taking orders.
+All prints live in the `PRODUCTS` array near the top of `script.js`. The Phone Stand is a real product. The other four prints are examples, with drawings made for this site. Replace those before taking orders for them.
 
 To add a print, copy one whole `{ ... }` block, paste it after the last print (keep the comma after each block), and change the values:
 
