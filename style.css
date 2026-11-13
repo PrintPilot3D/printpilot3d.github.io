@@ -240,6 +240,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .art { width: min(88%, 230px); margin-top: 16px; }
 .art svg, .ci-thumb svg { width: 100%; height: auto; display: block; }
+.art img.photo, .ci-thumb img.photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb.has-photo { padding: 0; align-items: stretch; }
+.thumb.has-photo .art { width: 100%; height: 100%; margin: 0; }
+.thumb.has-photo .art img.photo { border-radius: 0; }
+.ci-thumb.has-photo { padding: 0; overflow: hidden; }
+.ci-thumb.has-photo img.photo { border-radius: 10px; }
 .tag {
   position: absolute;
   z-index: 2;
@@ -274,9 +280,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .empty { text-align: center; color: var(--muted); padding: 20px 0 60px; }
 
 /* Picture backgrounds. The class is "t-" plus the category in lowercase.
-   Desk, Cables, Gifts, and Home are ready. A new category uses purple
+   Desk, Tech, Cables, Gifts, and Home are ready. A new category uses purple
    unless you add a matching rule here. */
 .t-desk { background: linear-gradient(135deg, #c8f6fb, #14c4d4); }
+.t-tech { background: linear-gradient(135deg, #ddd6ff, #6d56e8); }
 .t-cables { background: linear-gradient(135deg, #ffe0c2, #ff8a3d); }
 .t-gifts { background: linear-gradient(135deg, #ffd0e2, #ff4d8d); }
 .t-home { background: linear-gradient(135deg, #d9f5c8, #5cb85c); }

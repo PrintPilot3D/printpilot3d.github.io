@@ -26,12 +26,21 @@ const DELIVERY_FEE = 15;
 
    id        – a short code with no spaces, like "phone-stand"
    name      – the name people see, like "Phone Stand"
-   category  – a group, like "Desk", "Cables", "Gifts", or "Home"
+   category  – a group, like "Desk", "Tech", "Gifts", or "Home"
    colour    – the filament colour, like "Cyan"
    price     – the price in AED. Type a number only. Do not type the letters AED.
    stock     – how many you can make. 0 shows "Sold out".
    icon      – which drawing to show. Use one of these words:
-               "stand", "tray", "clips", "keyring", "planter", or "cube"
+               "stand", "tray", "clips", "keyring", "planter",
+               "headphones", "earbuds", "watch", or "cube"
+   image     – optional photo. Leave the line starting with // so the
+               drawing shows. To use a photo instead:
+               1. Save the picture in the images folder.
+                  Example: images/headphone-stand.jpg
+               2. Delete the // so the line looks like this:
+                  image: "images/headphone-stand.jpg",
+               The photo then replaces the drawing. Use a picture you took.
+               Do not use brand logos.
    blurb     – one short sentence about the print
    example   – true shows an EXAMPLE label.
                Change it to false when this is a real print you are selling.
@@ -40,9 +49,8 @@ const DELIVERY_FEE = 15;
    Delete its whole { ... } block.
 
    The Phone Stand is a real product (example is false). The other
-   three prints are EXAMPLES. Replace those before you take orders
-   for them. You can delete an example, or change its words and
-   set example to false.
+   prints are EXAMPLES. Replace those before you take orders for them.
+   You can delete an example, or change its words and set example to false.
    ===================================================================== */
 const PRODUCTS = [
   {
@@ -87,6 +95,42 @@ const PRODUCTS = [
     stock: 4,
     icon: "planter",
     blurb: "A small pot for a desk plant or a succulent.",
+    example: true,
+  },
+  {
+    id: "headphone-stand",
+    name: "Headphone Stand",
+    category: "Tech",
+    colour: "Violet",
+    price: 45,
+    stock: 4,
+    icon: "headphones",
+    // image: "images/headphone-stand.jpg",
+    blurb: "A desk stand that keeps your headphones tidy.",
+    example: true,
+  },
+  {
+    id: "earbuds-case-holder",
+    name: "Earbuds Case Holder",
+    category: "Tech",
+    colour: "Cyan",
+    price: 20,
+    stock: 6,
+    icon: "earbuds",
+    // image: "images/earbuds-case-holder.jpg",
+    blurb: "A little stand for your earbuds case.",
+    example: true,
+  },
+  {
+    id: "watch-stand",
+    name: "Watch Stand",
+    category: "Tech",
+    colour: "Yellow",
+    price: 35,
+    stock: 4,
+    icon: "watch",
+    // image: "images/watch-stand.jpg",
+    blurb: "A stand that shows off your watch on your desk.",
     example: true,
   },
 ];
@@ -149,6 +193,37 @@ const ICONS = {
     <rect x="40" y="62" width="80" height="14" rx="5" fill="#ffd23f" stroke="#1c2340" stroke-width="3.5"/>
     <ellipse cx="80" cy="72" rx="30" ry="6" fill="#6b4423"/>
   </svg>`,
+  headphones: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="80" cy="108" rx="48" ry="7" fill="rgba(28,35,64,.12)"/>
+    <rect x="48" y="94" width="64" height="12" rx="6" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
+    <rect x="74" y="48" width="12" height="50" rx="4" fill="#fff4c2" stroke="#1c2340" stroke-width="3.5"/>
+    <rect x="40" y="38" width="80" height="12" rx="6" fill="#6d56e8" stroke="#1c2340" stroke-width="3.5"/>
+    <path d="M52 40 C52 16 108 16 108 40" fill="none" stroke="#1c2340" stroke-width="5" stroke-linecap="round"/>
+    <rect x="34" y="34" width="18" height="36" rx="9" fill="#ff4d8d" stroke="#1c2340" stroke-width="3"/>
+    <rect x="108" y="34" width="18" height="36" rx="9" fill="#14c4d4" stroke="#1c2340" stroke-width="3"/>
+  </svg>`,
+  earbuds: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="80" cy="108" rx="46" ry="7" fill="rgba(28,35,64,.12)"/>
+    <path d="M34 102 H126 L114 78 H46 Z" fill="#ffffff" stroke="#1c2340" stroke-width="3.5" stroke-linejoin="round"/>
+    <rect x="42" y="68" width="76" height="14" rx="6" fill="#ffd23f" stroke="#1c2340" stroke-width="3.5"/>
+    <rect x="56" y="22" width="48" height="54" rx="14" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
+    <path d="M62 46 H98" stroke="#1c2340" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="72" cy="35" r="6" fill="#14c4d4" stroke="#1c2340" stroke-width="2.5"/>
+    <circle cx="88" cy="35" r="6" fill="#ff4d8d" stroke="#1c2340" stroke-width="2.5"/>
+  </svg>`,
+  watch: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="90" cy="108" rx="46" ry="7" fill="rgba(28,35,64,.12)"/>
+    <path d="M28 100 L62 68 H132 L110 100 Z" fill="#ffffff" stroke="#1c2340" stroke-width="3.5" stroke-linejoin="round"/>
+    <ellipse cx="98" cy="74" rx="30" ry="11" fill="#ffd23f" stroke="#1c2340" stroke-width="3.5"/>
+    <rect x="84" y="16" width="22" height="16" rx="4" fill="#6d56e8" stroke="#1c2340" stroke-width="3"/>
+    <rect x="84" y="76" width="22" height="16" rx="4" fill="#6d56e8" stroke="#1c2340" stroke-width="3"/>
+    <circle cx="95" cy="50" r="26" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
+    <circle cx="95" cy="50" r="19" fill="#e8fbff" stroke="#1c2340" stroke-width="2.5"/>
+    <path d="M95 35 v5 M95 60 v5 M80 50 h5 M105 50 h5" stroke="#1c2340" stroke-width="2" stroke-linecap="round"/>
+    <path d="M95 50 V38" stroke="#ff4d8d" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M95 50 L106 55" stroke="#1c2340" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="95" cy="50" r="2.4" fill="#1c2340"/>
+  </svg>`,
   cube: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <ellipse cx="80" cy="104" rx="46" ry="8" fill="rgba(28,35,64,.12)"/>
     <rect x="36" y="74" width="88" height="18" rx="6" fill="#14c4d4" stroke="#1c2340" stroke-width="3.5"/>
@@ -189,6 +264,17 @@ function categoryClass(category) {
 }
 function iconSvg(name) {
   return ICONS[name] || ICONS.cube;
+}
+function productImage(p) {
+  const src = String(p && p.image || "").trim();
+  if (!src || /[\s"'<>]/.test(src)) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(src) || src.startsWith("//")) return "";
+  return src;
+}
+function productArt(p) {
+  const src = productImage(p);
+  if (!src) return iconSvg(p.icon);
+  return `<img class="photo" src="${esc(src)}" alt="">`;
 }
 
 let fulfillment = "pickup";
@@ -278,9 +364,9 @@ function renderGrid() {
     const sold = stockOf(p) <= 0;
     return `
     <article class="product" data-id="${esc(p.id)}">
-      <div class="thumb ${categoryClass(p.category)}">
+      <div class="thumb ${categoryClass(p.category)}${productImage(p) ? " has-photo" : ""}">
         ${p.example ? '<span class="tag">EXAMPLE</span>' : ""}
-        <div class="art">${iconSvg(p.icon)}</div>
+        <div class="art">${productArt(p)}</div>
       </div>
       <div class="p-body">
         <h3>${esc(p.name)}</h3>
@@ -352,7 +438,7 @@ function renderCart() {
   if (optionName) optionName.textContent = `Delivery in Dubai (+${money(feeAmount())})`;
   $("#cartItems").innerHTML = lines.length ? lines.map(({ p, qty }) => `
     <div class="ci">
-      <div class="ci-thumb ${categoryClass(p.category)}">${iconSvg(p.icon)}</div>
+      <div class="ci-thumb ${categoryClass(p.category)}${productImage(p) ? " has-photo" : ""}">${productArt(p)}</div>
       <div>
         <div class="ci-name">${esc(p.name)}</div>
         <div class="ci-sub">${esc(p.colour)} · ${esc(money(priceOf(p)))} each</div>
