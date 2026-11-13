@@ -46,7 +46,7 @@
     <div class="hero-text">
       <span class="pill">Dubai · Prices in AED</span>
       <h1>Small prints,<br><span class="hl">big colour.</span></h1>
-      <p>Print Pilot 3D is a 3D-print shop in Dubai. Browse the sample prints, add them to your cart, and send the order on WhatsApp. You pay when you collect.</p>
+      <p>Print Pilot 3D is a 3D-print shop in Dubai. Browse the sample prints, add them to your cart, and send the order on WhatsApp. You pay when you collect, or on delivery in Dubai.</p>
       <div class="hero-cta">
         <a href="#shop" class="btn btn-primary">Browse prints</a>
         <a href="#custom" class="btn btn-ghost">Custom print request</a>
@@ -146,9 +146,9 @@
     <h2>How to buy</h2>
     <ol class="steps">
       <li><span>1</span><h3>Add to cart</h3><p>Pick the prints you want. Your cart stays saved on this device.</p></li>
-      <li><span>2</span><h3>Send your order</h3><p>Add your name and phone, then tap WhatsApp. The message lists your items, quantities, and the AED total.</p></li>
-      <li><span>3</span><h3>The shop confirms</h3><p>You’ll get a reply on WhatsApp to check the details and agree how you collect in Dubai.</p></li>
-      <li><span>4</span><h3>Pay on collection</h3><p>Pay by cash or bank transfer when you collect the print. This website only sends the order.</p></li>
+      <li><span>2</span><h3>Send your order</h3><p>Choose pickup or delivery in Dubai, add your details, then tap WhatsApp. The message lists your items, the fee, and the AED total.</p></li>
+      <li><span>3</span><h3>The shop confirms</h3><p>You’ll get a reply on WhatsApp to confirm the order and the handover.</p></li>
+      <li><span>4</span><h3>Pay when you get it</h3><p>Pay by cash or bank transfer. Pickup is free. Delivery in Dubai adds the fee shown in the cart.</p></li>
     </ol>
   </div>
 </section>
@@ -157,7 +157,7 @@
   <div>
     <h2>About the shop</h2>
     <p>Print Pilot 3D makes small 3D prints in Dubai: stands, organisers, clips, keyrings, planters, and one-off ideas.</p>
-    <p>Each order is confirmed on WhatsApp before it is printed. Payment is arranged when you collect.</p>
+    <p>Each order is confirmed on WhatsApp before it is printed. Payment is arranged when you collect, or when the print is delivered in Dubai.</p>
   </div>
   <div class="about-box">
     <h3>Questions?</h3>
@@ -169,7 +169,7 @@
 <footer class="footer">
   <div class="container">
     <p>© <span id="year"></span> <span data-shop-name>Print Pilot 3D</span> · Dubai, UAE</p>
-    <p class="small">This website lists prints and sends orders on WhatsApp. Payment is arranged when you collect.</p>
+    <p class="small">This website lists prints and sends orders on WhatsApp. Payment is arranged when you collect, or on delivery in Dubai.</p>
   </div>
 </footer>
 
@@ -180,19 +180,42 @@
     <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart">✕</button>
   </div>
   <div id="cartItems" class="cart-items"></div>
-  <div class="cart-total"><span>Total</span><strong id="cartTotal">0 AED</strong></div>
+  <div class="cart-breakdown">
+    <div class="cart-line"><span>Subtotal</span><strong id="cartSubtotal">0 AED</strong></div>
+    <div class="cart-line"><span id="feeLabel">Pickup (free)</span><strong id="cartFee">0 AED</strong></div>
+    <div class="cart-total"><span>Total</span><strong id="cartTotal">0 AED</strong></div>
+  </div>
 
-  <form id="orderForm" class="order-form">
+  <form id="orderForm" class="order-form" novalidate>
     <h3>Checkout</h3>
-    <p class="small muted">This sends your order on WhatsApp so the shop can confirm it. You pay when you collect.</p>
+    <p class="small muted">This sends your order on WhatsApp so the shop can confirm it. Pickup is free. Delivery in Dubai is added to the total.</p>
+    <fieldset class="ship-choice">
+      <legend>How should we hand it over?</legend>
+      <label class="ship-option">
+        <input type="radio" name="fulfillment" value="pickup" checked>
+        <span><strong>Pickup (free)</strong><small>Collect in Dubai</small></span>
+      </label>
+      <label class="ship-option">
+        <input type="radio" name="fulfillment" value="delivery">
+        <span><strong id="deliveryOptionName">Delivery in Dubai (+15 AED)</strong><small>Added to the total</small></span>
+      </label>
+    </fieldset>
     <label>Name
       <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
     </label>
     <label>Phone
-      <input name="phone" type="tel" required maxlength="30" autocomplete="tel" placeholder="05x xxx xxxx">
+      <input name="phone" type="tel" required maxlength="30" autocomplete="tel" inputmode="tel" placeholder="05x xxx xxxx">
     </label>
+    <div id="addressFields" hidden>
+      <label>Area
+        <input id="areaInput" name="area" maxlength="80" autocomplete="address-level2" placeholder="Marina, JVC, Deira…">
+      </label>
+      <label>Building / villa
+        <input id="buildingInput" name="building" maxlength="120" autocomplete="address-line1" placeholder="Building, villa, and apartment">
+      </label>
+    </div>
     <label>Notes
-      <textarea name="notes" maxlength="300" rows="2" placeholder="Pickup area, colour questions…"></textarea>
+      <textarea name="notes" maxlength="300" rows="2" placeholder="Colour, gate, floor, or anything else"></textarea>
     </label>
     <p class="form-error" id="formError" hidden></p>
     <button type="submit" class="btn btn-wa">Order on WhatsApp</button>

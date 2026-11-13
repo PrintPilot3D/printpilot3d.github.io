@@ -32,6 +32,8 @@ Picture backgrounds for Desk, Cables, Gifts, and Home are in `style.css`. Any ot
 
 The shop name and WhatsApp number are in the `SHOP` object in `script.js`. The WhatsApp value is digits only, in international format, with no `+` and no leading `0`. It is currently `971507591359`.
 
+The Dubai delivery fee is the `DELIVERY_FEE` number near the top of `script.js`. Change that number to change the price. Pickup stays free.
+
 Orders and custom print requests open WhatsApp. There is no email contact on this site.
 
 ## Files

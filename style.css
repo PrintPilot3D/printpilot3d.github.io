@@ -198,7 +198,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border-radius: 5px;
 }
 .filters { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-.filters input, .filters select, .order-form input, .order-form textarea, .custom-form input, .custom-form textarea {
+.filters input, .filters select, .order-form input:not([type="radio"]), .order-form textarea, .custom-form input, .custom-form textarea {
   font: inherit;
   padding: 11px 14px;
   border: 2px solid var(--line);
@@ -391,13 +391,37 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 0;
   font-size: .8rem;
 }
+.cart-breakdown { display: flex; flex-direction: column; gap: 6px; padding-top: 12px; }
+.cart-line, .cart-total { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.cart-line { font-size: .95rem; color: var(--muted); }
+.cart-line strong { color: var(--ink); font-weight: 600; }
 .cart-total {
-  display: flex;
-  justify-content: space-between;
   font-size: 1.2rem;
-  padding: 12px 0;
+  padding-top: 8px;
   border-top: 2px dashed var(--line);
 }
+.ship-choice { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ship-choice legend { font-weight: 700; padding: 0; margin-bottom: 2px; }
+.order-form .ship-option {
+  display: grid;
+  grid-template-columns: 1.15rem 1fr;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 500;
+  text-align: left;
+}
+.ship-option.selected { border-color: var(--cyan-d); background: #e7f9fc; }
+.ship-option strong { display: block; font-weight: 700; }
+.ship-option small { display: block; color: var(--muted); font-weight: 500; }
+.ship-option input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--cyan-d); }
+#addressFields { display: grid; gap: 10px; }
+#addressFields[hidden] { display: none; }
 .order-form { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
 .order-form h3 { margin: 0; }
 .form-error { color: var(--magenta-d); margin: 0; font-size: .9rem; font-weight: 600; }

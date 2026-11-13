@@ -8,6 +8,15 @@ const SHOP = {
 };
 
 /* =====================================================================
+   DELIVERY FEE — the extra charge for "Delivery in Dubai"
+   ---------------------------------------------------------------------
+   Change the number below to change the delivery price.
+   It is in AED. Type a number only. Do not type the letters AED.
+   Pickup stays free. This fee is added only when delivery is chosen.
+   ===================================================================== */
+const DELIVERY_FEE = 15;
+
+/* =====================================================================
    PRODUCTS — the prints for sale
    ---------------------------------------------------------------------
    HOW TO ADD A PRODUCT
@@ -182,24 +191,46 @@ function iconSvg(name) {
   return ICONS[name] || ICONS.cube;
 }
 
+let fulfillment = "pickup";
 let cart = loadCart();
 
+function cleanItems(raw) {
+  const clean = {};
+  if (!raw || typeof raw !== "object") return clean;
+  for (const [id, q] of Object.entries(raw)) {
+    const p = byId(id);
+    const qty = Math.floor(Number(q));
+    if (p && stockOf(p) > 0 && qty > 0) clean[id] = Math.min(qty, stockOf(p));
+  }
+  return clean;
+}
 function loadCart() {
   try {
     const raw = JSON.parse(localStorage.getItem(CART_KEY)) || {};
-    const clean = {};
-    for (const [id, q] of Object.entries(raw)) {
-      const p = byId(id);
-      const qty = Math.floor(Number(q));
-      if (p && stockOf(p) > 0 && qty > 0) clean[id] = Math.min(qty, stockOf(p));
-    }
-    return clean;
+    // New carts are { items, fulfillment }. Older carts were just { id: qty }.
+    const items = raw && typeof raw.items === "object" ? raw.items : raw;
+    fulfillment = raw && raw.fulfillment === "delivery" ? "delivery" : "pickup";
+    return cleanItems(items);
   } catch {
+    fulfillment = "pickup";
     return {};
   }
 }
 function saveCart() {
-  try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch { /* private mode */ }
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify({ items: cart, fulfillment }));
+  } catch { /* private mode */ }
+}
+function feeAmount() {
+  const n = Number(DELIVERY_FEE);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return n;
+}
+function currentFee() {
+  return fulfillment === "delivery" ? feeAmount() : 0;
+}
+function optionLabel() {
+  return fulfillment === "delivery" ? `Delivery in Dubai (+${money(feeAmount())})` : "Pickup (free)";
 }
 
 function renderFilters() {
@@ -304,7 +335,21 @@ function renderCart() {
   const count = lines.reduce((sum, l) => sum + l.qty, 0);
   $("#cartCount").textContent = String(count);
   $("#cartOpen").setAttribute("aria-label", `Open cart, ${count} item${count === 1 ? "" : "s"}`);
-  $("#cartTotal").textContent = money(cartTotal());
+  const fee = currentFee();
+  $("#cartSubtotal").textContent = money(cartTotal());
+  $("#feeLabel").textContent = fulfillment === "delivery" ? "Delivery in Dubai" : "Pickup (free)";
+  $("#cartFee").textContent = money(fee);
+  $("#cartTotal").textContent = money(cartTotal() + fee);
+  document.querySelectorAll('input[name="fulfillment"]').forEach((input) => {
+    input.checked = input.value === fulfillment;
+    input.closest(".ship-option")?.classList.toggle("selected", input.checked);
+  });
+  const delivering = fulfillment === "delivery";
+  $("#addressFields").hidden = !delivering;
+  $("#areaInput").required = delivering;
+  $("#buildingInput").required = delivering;
+  const optionName = $("#deliveryOptionName");
+  if (optionName) optionName.textContent = `Delivery in Dubai (+${money(feeAmount())})`;
   $("#cartItems").innerHTML = lines.length ? lines.map(({ p, qty }) => `
     <div class="ci">
       <div class="ci-thumb ${categoryClass(p.category)}">${iconSvg(p.icon)}</div>
@@ -342,6 +387,7 @@ function showWhatsApp(linkId, text) {
 }
 function buildOrderMessage(data) {
   const lines = cartLines();
+  const fee = currentFee();
   const itemLines = lines.map(({ p, qty }) =>
     `• ${qty} x ${p.name} (${p.category}, ${p.colour}) at ${money(priceOf(p))} each - ${money(priceOf(p) * qty)}`);
   const parts = [
@@ -349,11 +395,18 @@ function buildOrderMessage(data) {
     "",
     ...itemLines,
     "",
-    `Total: ${money(cartTotal())}`,
+    `Subtotal: ${money(cartTotal())}`,
+    `Option: ${optionLabel()}`,
+    `Delivery fee: ${money(fee)}`,
+    `Total: ${money(cartTotal() + fee)}`,
     "",
     `Name: ${data.name}`,
     `Phone: ${data.phone}`,
   ];
+  if (fulfillment === "delivery") {
+    parts.push(`Area: ${data.area}`);
+    parts.push(`Building / villa: ${data.building}`);
+  }
   if (data.notes) parts.push(`Notes: ${data.notes}`);
   if (lines.some(({ p }) => p.example)) {
     parts.push("", "Some of these are still example products on the website.");
@@ -383,6 +436,11 @@ function handleCheckout(e) {
   const data = readForm(e.target);
   if (!cartLines().length) { err.textContent = "Your cart is empty."; err.hidden = false; return; }
   if (!data.name || !data.phone) { err.textContent = "Please add your name and phone."; err.hidden = false; return; }
+  if (fulfillment === "delivery" && (!data.area || !data.building)) {
+    err.textContent = "Please add the area and the building or villa for delivery.";
+    err.hidden = false;
+    return;
+  }
   err.hidden = true;
   showWhatsApp("#orderWaLink", buildOrderMessage(data));
   toast("Order message ready — just hit send");
@@ -436,6 +494,13 @@ function init() {
   $("#cartClose").addEventListener("click", () => openCart(false));
   $("#overlay").addEventListener("click", () => openCart(false));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") openCart(false); });
+  $("#orderForm").addEventListener("change", (e) => {
+    if (e.target.name !== "fulfillment") return;
+    fulfillment = e.target.value === "delivery" ? "delivery" : "pickup";
+    $("#formError").hidden = true;
+    saveCart();
+    renderCart();
+  });
   $("#orderForm").addEventListener("submit", handleCheckout);
   $("#customForm").addEventListener("submit", handleCustom);
   $("#clearCart").addEventListener("click", () => { cart = {}; saveCart(); renderCart(); toast("Cart cleared"); });
