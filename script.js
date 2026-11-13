@@ -69,7 +69,7 @@ const PRODUCTS = [
     name: "Headphone Stand",
     category: "Tech",
     colour: "Violet",
-    price: 45,
+    price: 35,
     stock: 4,
     icon: "headphones",
     // image: "images/headphone-stand.jpg",
