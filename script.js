@@ -58,7 +58,7 @@ const PRODUCTS = [
     name: "Phone Stand",
     category: "Desk",
     colour: "Cyan",
-    price: 25,
+    price: 20,
     stock: 6,
     icon: "stand",
     blurb: "Holds a phone upright on a desk.",
