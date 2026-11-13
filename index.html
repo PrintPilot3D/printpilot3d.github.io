@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+  Print Pilot 3D
+  Products, prices, and the WhatsApp number live in script.js (look for SHOP and PRODUCTS).
+  The shop name in the title is filled in from that same file.
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print Pilot 3D – 3D prints in Dubai</title>
+<meta name="description" content="Print Pilot 3D is a 3D-print shop in Dubai. Browse sample prints, request a custom print, and send your order on WhatsApp. Prices in AED.">
+<meta name="theme-color" content="#2a1878">
+<link rel="canonical" href="https://printpilot3d.github.io/">
+<meta property="og:title" content="Print Pilot 3D">
+<meta property="og:description" content="A colourful 3D-print shop in Dubai. Order on WhatsApp. Prices in AED.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://printpilot3d.github.io/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#shop">Skip to prints</a>
+
+<header class="topbar" id="top">
+  <div class="container topbar-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span data-shop-name>Print Pilot 3D</span>
+    </a>
+    <nav class="nav" aria-label="Page">
+      <a href="#shop">Shop</a>
+      <a href="#custom">Custom print</a>
+      <a href="#how">How to buy</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="cart-btn" id="cartOpen" type="button" aria-label="Open cart">Cart <span id="cartCount">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="pill">Dubai · Prices in AED</span>
+      <h1>Small prints,<br><span class="hl">big colour.</span></h1>
+      <p>Print Pilot 3D is a 3D-print shop in Dubai. Browse the sample prints, add them to your cart, and send the order on WhatsApp. You pay when you collect.</p>
+      <div class="hero-cta">
+        <a href="#shop" class="btn btn-primary">Browse prints</a>
+        <a href="#custom" class="btn btn-ghost">Custom print request</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <svg class="hero-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+        <ellipse cx="250" cy="262" rx="120" ry="14" fill="rgba(28,35,64,.18)"/>
+        <g class="spool">
+          <circle cx="62" cy="148" r="42" fill="#14c4d4" stroke="#1c2340" stroke-width="4"/>
+          <circle cx="62" cy="148" r="16" fill="#fff7d6" stroke="#1c2340" stroke-width="4"/>
+          <path d="M62 112 v72 M38 134 h48 M40 162 h44" stroke="#1c2340" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <path d="M104 132 C132 120 140 78 168 74" fill="none" stroke="#ff4d8d" stroke-width="6" stroke-linecap="round"/>
+        <rect x="128" y="78" width="220" height="156" rx="26" fill="#ffffff" stroke="#1c2340" stroke-width="4"/>
+        <rect x="148" y="52" width="180" height="34" rx="14" fill="#ffd23f" stroke="#1c2340" stroke-width="4"/>
+        <circle cx="316" cy="108" r="6" fill="#7bd66a" stroke="#1c2340" stroke-width="3"/>
+        <rect x="148" y="104" width="124" height="104" rx="14" fill="#e5fbff" stroke="#1c2340" stroke-width="3"/>
+        <rect x="166" y="158" width="88" height="14" rx="5" fill="#14c4d4" stroke="#1c2340" stroke-width="2.5"/>
+        <rect x="176" y="140" width="68" height="14" rx="5" fill="#ff4d8d" stroke="#1c2340" stroke-width="2.5"/>
+        <rect x="186" y="122" width="48" height="14" rx="5" fill="#ffd23f" stroke="#1c2340" stroke-width="2.5"/>
+        <rect x="286" y="128" width="44" height="10" rx="4" fill="#1c2340"/>
+        <path d="M300 138 h16 l-8 16 z" fill="#ff8a3d" stroke="#1c2340" stroke-width="2.5" stroke-linejoin="round"/>
+        <rect x="156" y="214" width="28" height="12" rx="5" fill="#1c2340"/>
+        <rect x="292" y="214" width="28" height="12" rx="5" fill="#1c2340"/>
+        <g class="mini-print">
+          <rect x="318" y="196" width="62" height="14" rx="5" fill="#7b61ff" stroke="#1c2340" stroke-width="3"/>
+          <rect x="326" y="180" width="46" height="14" rx="5" fill="#ff4d8d" stroke="#1c2340" stroke-width="3"/>
+          <rect x="334" y="164" width="30" height="14" rx="5" fill="#ffd23f" stroke="#1c2340" stroke-width="3"/>
+        </g>
+        <path d="M352 48 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 z" fill="#ffffff"/>
+        <path d="M108 196 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="#ffd23f"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main id="shop" class="container">
+  <div class="section-head">
+    <h2>Shop the prints</h2>
+    <p class="muted">Sample prints, with prices in AED.</p>
+  </div>
+
+  <p id="exampleBanner" class="notice" hidden><strong>Example prints.</strong> These drawings are samples, not real stock. Replace them in <code>script.js</code> before you take orders.</p>
+
+  <div class="filters">
+    <input type="search" id="search" placeholder="Search prints" aria-label="Search prints">
+    <select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option></select>
+    <select id="priceFilter" aria-label="Filter by price">
+      <option value="all">Any price</option>
+      <option value="under-25">Under 25 AED</option>
+      <option value="25-40">25 – 40 AED</option>
+      <option value="over-40">Over 40 AED</option>
+    </select>
+    <select id="sort" aria-label="Sort">
+      <option value="default">Sort: Featured</option>
+      <option value="price-asc">Price: low to high</option>
+      <option value="price-desc">Price: high to low</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+
+  <div id="grid" class="grid"></div>
+  <p id="empty" class="empty" hidden>No prints match that search. Try a different word.</p>
+</main>
+
+<section id="custom" class="custom-band">
+  <div class="container custom-inner">
+    <div>
+      <h2>Custom print request</h2>
+      <p>Want something that is not in the shop? Describe it here. A WhatsApp message is filled in for you, and the shop replies to say if it can be printed and what it would cost.</p>
+    </div>
+    <form id="customForm" class="custom-form">
+      <label>Your name
+        <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
+      </label>
+      <label>What should we print?
+        <textarea name="idea" required maxlength="400" rows="3" placeholder="A small boat, a name tag, a bracket…"></textarea>
+      </label>
+      <label>Colour <span class="optional">(optional)</span>
+        <input name="colour" maxlength="40" placeholder="Purple, black, any">
+      </label>
+      <label>Size or notes <span class="optional">(optional)</span>
+        <textarea name="notes" maxlength="300" rows="2" placeholder="About 4 cm tall, for a desk…"></textarea>
+      </label>
+      <p class="form-error" id="customError" hidden></p>
+      <button type="submit" class="btn btn-wa">Send custom print request</button>
+      <a id="customWaLink" class="fallback" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp did not open? Tap here to send the message.</a>
+    </form>
+  </div>
+</section>
+
+<section id="how" class="band">
+  <div class="container">
+    <h2>How to buy</h2>
+    <ol class="steps">
+      <li><span>1</span><h3>Add to cart</h3><p>Pick the prints you want. Your cart stays saved on this device.</p></li>
+      <li><span>2</span><h3>Send your order</h3><p>Add your name and phone, then tap WhatsApp. The message lists your items, quantities, and the AED total.</p></li>
+      <li><span>3</span><h3>The shop confirms</h3><p>You’ll get a reply on WhatsApp to check the details and agree how you collect in Dubai.</p></li>
+      <li><span>4</span><h3>Pay on collection</h3><p>Pay by cash or bank transfer when you collect the print. This website only sends the order.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="about" class="container about">
+  <div>
+    <h2>About the shop</h2>
+    <p>Print Pilot 3D makes small 3D prints in Dubai: stands, organisers, clips, keyrings, planters, and one-off ideas.</p>
+    <p>Each order is confirmed on WhatsApp before it is printed. Payment is arranged when you collect.</p>
+  </div>
+  <div class="about-box">
+    <h3>Questions?</h3>
+    <p>Ask about a colour, a size, or an idea. A short WhatsApp message is the way to reach the shop.</p>
+    <a class="btn btn-primary" id="waContact" href="#" target="_blank" rel="noopener noreferrer">WhatsApp the shop</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© <span id="year"></span> <span data-shop-name>Print Pilot 3D</span> · Dubai, UAE</p>
+    <p class="small">This website lists prints and sends orders on WhatsApp. Payment is arranged when you collect.</p>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <h2>Your cart</h2>
+    <button class="icon-btn" id="cartClose" type="button" aria-label="Close cart">✕</button>
+  </div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="cart-total"><span>Total</span><strong id="cartTotal">0 AED</strong></div>
+
+  <form id="orderForm" class="order-form">
+    <h3>Checkout</h3>
+    <p class="small muted">This sends your order on WhatsApp so the shop can confirm it. You pay when you collect.</p>
+    <label>Name
+      <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
+    </label>
+    <label>Phone
+      <input name="phone" type="tel" required maxlength="30" autocomplete="tel" placeholder="05x xxx xxxx">
+    </label>
+    <label>Notes
+      <textarea name="notes" maxlength="300" rows="2" placeholder="Pickup area, colour questions…"></textarea>
+    </label>
+    <p class="form-error" id="formError" hidden></p>
+    <button type="submit" class="btn btn-wa">Order on WhatsApp</button>
+    <a id="orderWaLink" class="fallback" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp did not open? Tap here to send the message.</a>
+    <button type="button" class="link-btn" id="clearCart">Clear cart</button>
+    <a class="link-btn" href="#custom" id="customFromCart">Custom print request</a>
+  </form>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="noscript">This shop needs JavaScript to show the prints and the cart.</p></noscript>
+<script src="script.js"></script>
+</body>
+</html>
