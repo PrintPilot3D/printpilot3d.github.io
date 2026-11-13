@@ -22,7 +22,7 @@ To add a print, copy one whole `{ ... }` block, paste it after the last print (k
 - `colour` — the filament colour
 - `price` — the price in AED, a number only, with no "AED" letters
 - `stock` — how many you can make (`0` shows "Sold out")
-- `icon` — the drawing: `stand`, `tray`, `clips`, `keyring`, `planter`, `headphones`, `earbuds`, `watch`, or `cube`
+- `icon` — the drawing: `stand`, `tray`, `clips`, `keyring`, `planter`, `headphones`, `earbuds`, `watch`, `charger`, or `cube`
 - `image` — optional. Leave the `//` in place to keep the drawing. To show a photo, save it in the `images` folder and remove the `//`, for example `image: "images/headphone-stand.jpg",`
 - `blurb` — one short sentence
 - `example` — `true` shows an EXAMPLE label. Set it to `false` when the print is real

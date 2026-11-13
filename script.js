@@ -32,7 +32,7 @@ const DELIVERY_FEE = 15;
    stock     – how many you can make. 0 shows "Sold out".
    icon      – which drawing to show. Use one of these words:
                "stand", "tray", "clips", "keyring", "planter",
-               "headphones", "earbuds", "watch", or "cube"
+               "headphones", "earbuds", "watch", "charger", or "cube"
    image     – optional photo. Leave the line starting with // so the
                drawing shows. To use a photo instead:
                1. Save the picture in the images folder.
@@ -122,15 +122,27 @@ const PRODUCTS = [
     example: true,
   },
   {
-    id: "watch-stand",
-    name: "Watch Stand",
+    id: "apple-watch-stand",
+    name: "Apple Watch Stand",
     category: "Tech",
     colour: "Yellow",
     price: 35,
     stock: 4,
+    icon: "charger",
+    // image: "images/apple-watch-stand.jpg",
+    blurb: "A charging stand for Apple Watch. Uses your own Apple charger.",
+    example: true,
+  },
+  {
+    id: "watch-stand",
+    name: "Watch Stand",
+    category: "Tech",
+    colour: "Coral",
+    price: 25,
+    stock: 6,
     icon: "watch",
     // image: "images/watch-stand.jpg",
-    blurb: "A stand that shows off your watch on your desk.",
+    blurb: "A stand that fits most watches and smartwatches.",
     example: true,
   },
 ];
@@ -211,18 +223,30 @@ const ICONS = {
     <circle cx="72" cy="35" r="6" fill="#14c4d4" stroke="#1c2340" stroke-width="2.5"/>
     <circle cx="88" cy="35" r="6" fill="#ff4d8d" stroke="#1c2340" stroke-width="2.5"/>
   </svg>`,
+  charger: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="78" cy="108" rx="48" ry="7" fill="rgba(28,35,64,.12)"/>
+    <path d="M30 102 H126 L114 84 H42 Z" fill="#ffffff" stroke="#1c2340" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M56 84 L70 34 H112 L98 84 Z" fill="#fff4c2" stroke="#1c2340" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="86" cy="72" r="13" fill="#ffd23f" stroke="#1c2340" stroke-width="3"/>
+    <circle cx="86" cy="72" r="5" fill="#ffffff" stroke="#1c2340" stroke-width="2.5"/>
+    <g transform="rotate(-8 84 56)">
+      <rect x="62" y="26" width="46" height="54" rx="14" fill="#1c2340"/>
+      <rect x="67" y="31" width="36" height="44" rx="9" fill="#e8fbff"/>
+    </g>
+    <path d="M114 96 H136" stroke="#6d56e8" stroke-width="4" stroke-linecap="round"/>
+  </svg>`,
   watch: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <ellipse cx="90" cy="108" rx="46" ry="7" fill="rgba(28,35,64,.12)"/>
-    <path d="M28 100 L62 68 H132 L110 100 Z" fill="#ffffff" stroke="#1c2340" stroke-width="3.5" stroke-linejoin="round"/>
-    <ellipse cx="98" cy="74" rx="30" ry="11" fill="#ffd23f" stroke="#1c2340" stroke-width="3.5"/>
-    <rect x="84" y="16" width="22" height="16" rx="4" fill="#6d56e8" stroke="#1c2340" stroke-width="3"/>
-    <rect x="84" y="76" width="22" height="16" rx="4" fill="#6d56e8" stroke="#1c2340" stroke-width="3"/>
-    <circle cx="95" cy="50" r="26" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
-    <circle cx="95" cy="50" r="19" fill="#e8fbff" stroke="#1c2340" stroke-width="2.5"/>
-    <path d="M95 35 v5 M95 60 v5 M80 50 h5 M105 50 h5" stroke="#1c2340" stroke-width="2" stroke-linecap="round"/>
-    <path d="M95 50 V38" stroke="#ff4d8d" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M95 50 L106 55" stroke="#1c2340" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="95" cy="50" r="2.4" fill="#1c2340"/>
+    <ellipse cx="80" cy="108" rx="36" ry="7" fill="rgba(28,35,64,.12)"/>
+    <rect x="62" y="98" width="36" height="10" rx="5" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
+    <path d="M58 62 C58 30 102 30 102 62 C102 94 58 94 58 62" fill="none" stroke="#6d56e8" stroke-width="10"/>
+    <ellipse cx="80" cy="62" rx="26" ry="38" fill="#ffd23f" stroke="#1c2340" stroke-width="3.5"/>
+    <path d="M54 62 C54 34 106 34 106 62" fill="none" stroke="#6d56e8" stroke-width="8" stroke-linecap="round"/>
+    <path d="M54 62 C54 90 106 90 106 62" fill="none" stroke="#6d56e8" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="80" cy="62" r="18" fill="#ffffff" stroke="#1c2340" stroke-width="3.5"/>
+    <circle cx="80" cy="62" r="12" fill="#e8fbff" stroke="#1c2340" stroke-width="2.5"/>
+    <path d="M80 62 V52" stroke="#ff4d8d" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M80 62 L88 67" stroke="#1c2340" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="80" cy="62" r="2.2" fill="#1c2340"/>
   </svg>`,
   cube: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <ellipse cx="80" cy="104" rx="46" ry="8" fill="rgba(28,35,64,.12)"/>
