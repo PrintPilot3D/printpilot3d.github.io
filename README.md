@@ -35,7 +35,7 @@ The shop name and WhatsApp number are in the `SHOP` object in `script.js`. The W
 
 The Dubai delivery fee is the `DELIVERY_FEE` number near the top of `script.js`. Change that number to change the price. Pickup stays free.
 
-Card payment stays hidden while `CARD_PAYMENT_LINK` at the top of `script.js` is `""`. Paste a Stripe (or similar) payment link there to show "Card payment online". Do not put bank details on the site.
+Card payment stays hidden while `CARD_PAYMENT_LINK` at the top of `script.js` is `""`. Paste an https Ziina or Stripe link there to show "Card payment online". The allowed sites are listed in `SECURITY.md`. Do not put bank details on the site.
 
 Reviews live in the `REVIEWS` array in `script.js`. Leave it empty until a customer really writes one. The YouTube button stays hidden while `YOUTUBE_LINK` is `""`. Paste a YouTube link there to show it.
 

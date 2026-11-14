@@ -1,9 +1,10 @@
 /* =====================================================================
    SHOP SETTINGS — edit these first
    ===================================================================== */
+const WHATSAPP_NUMBER = "971507591359";
 const SHOP = {
   name: "Print Pilot 3D",   // also used in the page title
-  whatsapp: "971507591359", // digits only. 971 is the UAE. No + and no leading 0.
+  whatsapp: "971507591359", // must stay 971507591359. Orders always use this number.
   currency: "AED",
 };
 
@@ -20,11 +21,12 @@ const DELIVERY_FEE = 15;
    CARD PAYMENT LINK — online card payments
    ---------------------------------------------------------------------
    Leave this as "" and the "Card payment online" choice stays hidden.
-   To turn it on, paste a payment link between the quotes. A Stripe
-   link looks like https://buy.stripe.com/your-link — another card
-   service link is fine too. After someone sends the WhatsApp order,
-   a "Pay by card" button opens that link.
-   Do not put bank account numbers on this site.
+   To turn it on, paste one https payment link between the quotes.
+   The site only accepts these sites: ziina.com (and its subdomains,
+   including pay.ziina.com), buy.stripe.com, and checkout.stripe.com.
+   Example: https://buy.stripe.com/your-link
+   Any other link is ignored and the card choice stays hidden.
+   Do not put bank account numbers on this site. See SECURITY.md.
    ===================================================================== */
 const CARD_PAYMENT_LINK = "";
 
@@ -359,10 +361,21 @@ function renderReviews() {
     </article>`;
   }).join("");
 }
+function paymentHostAllowed(hostname) {
+  const host = String(hostname || "").toLowerCase();
+  if (host === "ziina.com" || host.endsWith(".ziina.com")) return true;
+  return host === "buy.stripe.com" || host === "checkout.stripe.com";
+}
 function cardPaymentLink() {
-  const url = String(CARD_PAYMENT_LINK || "").trim();
-  if (!/^https:\/\/\S+$/i.test(url)) return "";
-  return url;
+  const raw = String(CARD_PAYMENT_LINK || "").trim();
+  if (!raw) return "";
+  let parsed;
+  try { parsed = new URL(raw); } catch { parsed = null; }
+  if (!parsed || parsed.protocol !== "https:" || !paymentHostAllowed(parsed.hostname)) {
+    console.warn("CARD_PAYMENT_LINK was ignored. Use an https link on ziina.com, pay.ziina.com, buy.stripe.com, or checkout.stripe.com.");
+    return "";
+  }
+  return raw;
 }
 function chosenPayment() {
   if (payment === "transfer") return "transfer";
@@ -529,15 +542,35 @@ function openCart(open) {
   if (open) $("#cartClose").focus();
 }
 
+function stripMarkup(value) {
+  return String(value ?? "").replace(/\0/g, "").replace(/<[^>]*>/g, "").replace(/[<>]/g, "");
+}
+function cleanField(value, multiline) {
+  let text = stripMarkup(value);
+  text = multiline
+    ? text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    : text.replace(/[\u0000-\u001F\u007F]/g, " ");
+  return text.trim().slice(0, multiline ? 400 : 120);
+}
 function waLink(text) {
-  return `https://wa.me/${SHOP.whatsapp}?text=${encodeURIComponent(text)}`;
+  if (SHOP.whatsapp !== WHATSAPP_NUMBER || WHATSAPP_NUMBER !== "971507591359") {
+    console.warn("WhatsApp number did not match 971507591359. The order still uses that number.");
+  }
+  const message = stripMarkup(text);
+  return "https://wa.me/971507591359?text=" + encodeURIComponent(message);
+}
+function setExternal(el, url) {
+  if (!el) return;
+  el.href = url;
+  el.target = "_blank";
+  el.rel = "noopener noreferrer";
 }
 function showWhatsApp(linkId, text) {
   const url = waLink(text);
   const link = $(linkId);
-  link.href = url;
+  setExternal(link, url);
   link.hidden = false;
-  window.open(url, "_blank", "noopener");
+  window.open(url, "_blank", "noopener,noreferrer");
   return url;
 }
 function buildOrderMessage(data) {
@@ -582,7 +615,8 @@ function buildCustomMessage(data) {
 }
 function readForm(form) {
   const data = Object.fromEntries(new FormData(form));
-  for (const key in data) data[key] = String(data[key]).trim();
+  const multiline = new Set(["notes", "idea"]);
+  for (const key in data) data[key] = cleanField(data[key], multiline.has(key));
   return data;
 }
 
@@ -602,7 +636,7 @@ function handleCheckout(e) {
   const cardButton = $("#cardPayLink");
   const link = chosenPayment() === "card" ? cardPaymentLink() : "";
   if (link) {
-    cardButton.href = link;
+    setExternal(cardButton, link);
     cardButton.hidden = false;
   } else {
     cardButton.hidden = true;
@@ -638,7 +672,7 @@ function init() {
   const yt = youtubeLink();
   const ytLink = $("#youtubeLink");
   if (yt) {
-    ytLink.href = yt;
+    setExternal(ytLink, yt);
     ytLink.hidden = false;
   } else {
     ytLink.hidden = true;

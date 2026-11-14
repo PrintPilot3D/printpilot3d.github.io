@@ -1,0 +1,10 @@
+{
+  "whatsapp": "971507591359",
+  "paymentHosts": [
+    "ziina.com",
+    "*.ziina.com",
+    "pay.ziina.com",
+    "buy.stripe.com",
+    "checkout.stripe.com"
+  ]
+}
