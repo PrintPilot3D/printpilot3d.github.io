@@ -73,9 +73,9 @@ const YOUTUBE_LINK = "https://www.youtube.com/@PrintPilot3D-p1t/shorts";
    HOW TO REMOVE A PRODUCT
    Delete its whole { ... } block.
 
-   The Phone Stand is a real product (example is false). The other
-   prints are EXAMPLES. Replace those before you take orders for them.
-   You can delete an example, or change its words and set example to false.
+   The Phone Stand and Spiral Cone Fidget are real products (example
+   is false). A new print can start as an example. Set example to
+   false when you are ready to sell it.
    ===================================================================== */
 const PRODUCTS = [
   {
@@ -90,18 +90,6 @@ const PRODUCTS = [
     image2: "images/phone-stand-front.jpg",
     blurb: "Holds a phone upright on a desk.",
     example: false,
-  },
-  {
-    id: "headphone-stand",
-    name: "Headphone Stand",
-    category: "Tech",
-    colour: "Violet",
-    price: 35,
-    stock: 4,
-    icon: "headphones",
-    // image: "images/headphone-stand.jpg",
-    blurb: "A desk stand that keeps your headphones tidy.",
-    example: true,
   },
   {
     id: "spiral-cone-fidget",
