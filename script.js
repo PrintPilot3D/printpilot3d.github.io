@@ -98,6 +98,18 @@ const PRODUCTS = [
     blurb: "A desk stand that keeps your headphones tidy.",
     example: true,
   },
+  {
+    id: "spiral-cone-fidget",
+    name: "Spiral Cone Fidget",
+    category: "Fidget",
+    colour: "Black & White",
+    price: 25,
+    stock: 4,
+    icon: "cube",
+    image: "images/spiral-cone-fidget.jpg",
+    blurb: "A satisfying 3D-printed spiral fidget toy. The inner cone twists through the outer spiral.",
+    example: false,
+  },
 ];
 
 /* =====================================================================
