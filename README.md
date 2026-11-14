@@ -37,6 +37,8 @@ The Dubai delivery fee is the `DELIVERY_FEE` number near the top of `script.js`.
 
 Card payment stays hidden while `CARD_PAYMENT_LINK` at the top of `script.js` is `""`. Paste a Stripe (or similar) payment link there to show "Card payment online". Do not put bank details on the site.
 
+Reviews live in the `REVIEWS` array in `script.js`. Leave it empty until a customer really writes one. The YouTube button stays hidden while `YOUTUBE_LINK` is `""`. Paste a YouTube link there to show it.
+
 Orders and custom print requests open WhatsApp. There is no email contact on this site.
 
 ## Files

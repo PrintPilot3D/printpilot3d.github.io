@@ -29,6 +29,16 @@ const DELIVERY_FEE = 15;
 const CARD_PAYMENT_LINK = "";
 
 /* =====================================================================
+   YOUTUBE LINK — a button in the header
+   ---------------------------------------------------------------------
+   Leave this as "" and the YouTube button stays hidden.
+   To show it, paste your YouTube link between the quotes, like
+   https://www.youtube.com/@yourchannel
+   The button opens in a new tab.
+   ===================================================================== */
+const YOUTUBE_LINK = "";
+
+/* =====================================================================
    PRODUCTS — the prints for sale
    ---------------------------------------------------------------------
    HOW TO ADD A PRODUCT
@@ -88,6 +98,28 @@ const PRODUCTS = [
     blurb: "A desk stand that keeps your headphones tidy.",
     example: true,
   },
+];
+
+/* =====================================================================
+   REVIEWS — what customers said
+   ---------------------------------------------------------------------
+   HOW TO ADD A REVIEW
+   1. Copy the sample line below.
+   2. Paste it inside the [ ] of REVIEWS. Delete the // at the start.
+   3. Change the words. Keep a comma after each review.
+
+   name    – the customer's first name, like "Sara"
+   text    – what they said. Use their real words.
+   product – which print it is about, like "Phone Stand"
+   stars   – optional. A number from 1 to 5. Leave it out for no stars.
+
+   Sample line (keep the // until it is a real review):
+   // { name: "Sara", text: "The stand is just the right size.", product: "Phone Stand", stars: 5 },
+
+   Leave the list empty until someone really reviews a print.
+   Do not make up reviews.
+   ===================================================================== */
+const REVIEWS = [
 ];
 
 /* =====================================================================
@@ -285,6 +317,36 @@ function currentFee() {
 }
 function optionLabel() {
   return fulfillment === "delivery" ? `Delivery in Dubai (+${money(feeAmount())})` : "Pickup (free)";
+}
+function youtubeLink() {
+  const url = String(YOUTUBE_LINK || "").trim();
+  if (!/^https:\/\/\S+$/i.test(url)) return "";
+  let host = "";
+  try { host = new URL(url).hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; }
+  if (host !== "youtube.com" && host !== "m.youtube.com" && host !== "youtu.be" && host !== "youtube-nocookie.com") return "";
+  return url;
+}
+function starRow(stars) {
+  const n = Number(stars);
+  if (!Number.isInteger(n) || n < 1 || n > 5) return "";
+  return `<p class="stars" aria-label="${n} out of 5 stars">${"★".repeat(n)}${"☆".repeat(5 - n)}</p>`;
+}
+function renderReviews() {
+  const list = (Array.isArray(REVIEWS) ? REVIEWS : []).filter((r) => r && String(r.name || "").trim() && String(r.text || "").trim());
+  const empty = $("#reviewEmpty");
+  const box = $("#reviewList");
+  empty.hidden = list.length > 0;
+  box.hidden = list.length === 0;
+  box.innerHTML = list.map((r) => {
+    const product = String(r.product || "").trim();
+    return `
+    <article class="review">
+      ${starRow(r.stars)}
+      <p class="review-text">${esc(r.text)}</p>
+      <p class="review-who">${esc(r.name)}</p>
+      ${product ? `<p class="review-product">${esc(product)}</p>` : ""}
+    </article>`;
+  }).join("");
 }
 function cardPaymentLink() {
   const url = String(CARD_PAYMENT_LINK || "").trim();
@@ -562,8 +624,18 @@ function init() {
   $("#year").textContent = String(new Date().getFullYear());
   $("#exampleBanner").hidden = !PRODUCTS.some((p) => p.example);
   $("#waContact").href = waLink(`Hi! I have a question about ${SHOP.name}.`);
+  const yt = youtubeLink();
+  const ytLink = $("#youtubeLink");
+  if (yt) {
+    ytLink.href = yt;
+    ytLink.hidden = false;
+  } else {
+    ytLink.hidden = true;
+    ytLink.removeAttribute("href");
+  }
 
   renderFilters();
+  renderReviews();
   renderGrid();
   renderCart();
 

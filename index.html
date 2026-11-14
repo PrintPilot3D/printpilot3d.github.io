@@ -37,6 +37,10 @@
       <a href="#how">How to buy</a>
       <a href="#about">About</a>
     </nav>
+    <a id="youtubeLink" class="yt-link" target="_blank" rel="noopener noreferrer" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ff4d8d"></circle><path d="M10 8.5v7l6-3.5z" fill="#fff"></path></svg>
+      <span>YouTube</span>
+    </a>
     <button class="cart-btn" id="cartOpen" type="button" aria-label="Open cart">Cart <span id="cartCount">0</span></button>
   </div>
 </header>
@@ -113,6 +117,14 @@
 
   <div id="grid" class="grid"></div>
   <p id="empty" class="empty" hidden>No prints match that search. Try a different word.</p>
+
+  <section id="reviews" class="reviews" aria-labelledby="reviewsTitle">
+    <div class="section-head">
+      <h2 id="reviewsTitle">Reviews</h2>
+    </div>
+    <div id="reviewList" class="review-list" hidden></div>
+    <p id="reviewEmpty" class="empty" hidden>No reviews yet. Be the first to order and tell us what you think!</p>
+  </section>
 </main>
 
 <section id="custom" class="custom-band">

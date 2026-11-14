@@ -97,6 +97,21 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav { display: flex; gap: 18px; margin-left: auto; flex-wrap: wrap; }
 .nav a { text-decoration: none; font-weight: 500; color: var(--muted); }
 .nav a:hover { color: var(--cyan-d); }
+.yt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  background: #fff;
+  border: 2px solid var(--line);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 12px;
+  min-height: 40px;
+}
+.yt-link svg { width: 22px; height: 22px; display: block; }
+.yt-link[hidden] { display: none; }
 .cart-btn {
   border: 0;
   background: var(--yellow);
@@ -278,6 +293,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .add { padding: 9px 14px; border-radius: 10px; }
 .add:disabled { background: #b7bdcc; box-shadow: none; cursor: not-allowed; color: #fff; }
 .empty { text-align: center; color: var(--muted); padding: 20px 0 60px; }
+.reviews { padding-bottom: 12px; }
+.reviews .section-head { margin-top: 8px; }
+.review-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; padding-bottom: 36px; }
+.review-list[hidden] { display: none; }
+.review { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
+.review-text { margin: 0 0 10px; }
+.review-who { margin: 0; font-weight: 700; }
+.review-product { margin: 2px 0 0; color: var(--muted); font-size: .88rem; }
+.stars { margin: 0 0 8px; color: #7a5b00; letter-spacing: .08em; font-size: 1.05rem; }
 
 /* Picture backgrounds. The class is "t-" plus the category in lowercase.
    Desk, Tech, Cables, Gifts, and Home are ready. A new category uses purple
