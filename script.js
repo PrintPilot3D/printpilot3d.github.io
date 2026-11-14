@@ -20,13 +20,14 @@ const DELIVERY_FEE = 15;
 /* =====================================================================
    CARD PAYMENT LINK — online card payments
    ---------------------------------------------------------------------
-   Leave this as "" and the "Card payment online" choice stays hidden.
-   To turn it on, paste one https payment link between the quotes.
+   "Pay with credit card" is always shown. Leave this as "" and the
+   shop sends a card-payment link on WhatsApp after the order.
+   To show a Pay by card button as well, paste one https link here.
    The site only accepts these sites: ziina.com (and its subdomains,
    including pay.ziina.com), buy.stripe.com, and checkout.stripe.com.
    Example: https://buy.stripe.com/your-link
-   Any other link is ignored and the card choice stays hidden.
-   Do not put bank account numbers on this site. See SECURITY.md.
+   Any other link is ignored. Do not put bank account numbers here.
+   See SECURITY.md.
    ===================================================================== */
 const CARD_PAYMENT_LINK = "";
 
@@ -378,21 +379,19 @@ function cardPaymentLink() {
   return raw;
 }
 function chosenPayment() {
-  if (payment === "transfer") return "transfer";
-  if (payment === "card" && cardPaymentLink()) return "card";
-  return "cash";
+  return payment === "card" ? "card" : "cash";
 }
 function paymentLabel() {
-  const choice = chosenPayment();
-  if (choice === "transfer") return "Bank transfer";
-  if (choice === "card") return "Card";
-  return "Cash";
+  return chosenPayment() === "card" ? "Credit card" : "Cash";
 }
 function syncPayment() {
   const link = cardPaymentLink();
-  const cardOption = $("#cardOption");
-  if (cardOption) cardOption.hidden = !link;
-  if (!link && payment === "card") payment = "cash";
+  const note = $("#cardOptionNote");
+  if (note) {
+    note.textContent = link
+      ? "A pay button appears after you send the order."
+      : "We'll send you a secure card payment link on WhatsApp.";
+  }
   document.querySelectorAll('input[name="payment"]').forEach((input) => {
     const on = input.value === payment;
     input.checked = on;
@@ -515,6 +514,7 @@ function renderCart() {
   $("#addressFields").hidden = !delivering;
   $("#areaInput").required = delivering;
   $("#buildingInput").required = delivering;
+  $("#addressInput").required = delivering;
   const optionName = $("#deliveryOptionName");
   if (optionName) optionName.textContent = `Delivery in Dubai (+${money(feeAmount())})`;
   syncPayment();
@@ -596,6 +596,7 @@ function buildOrderMessage(data) {
     parts.push(`Area: ${data.area}`);
     parts.push(`Building / villa: ${data.building}`);
   }
+  if (data.address) parts.push(`Address: ${data.address}`);
   if (data.notes) parts.push(`Notes: ${data.notes}`);
   if (lines.some(({ p }) => p.example)) {
     parts.push("", "Some of these are still example products on the website.");
@@ -626,8 +627,8 @@ function handleCheckout(e) {
   const data = readForm(e.target);
   if (!cartLines().length) { err.textContent = "Your cart is empty."; err.hidden = false; return; }
   if (!data.name || !data.phone) { err.textContent = "Please add your name and phone."; err.hidden = false; return; }
-  if (fulfillment === "delivery" && (!data.area || !data.building)) {
-    err.textContent = "Please add the area and the building or villa for delivery.";
+  if (fulfillment === "delivery" && (!data.area || !data.building || !data.address)) {
+    err.textContent = "Please add the area, the building or villa, and the address for delivery.";
     err.hidden = false;
     return;
   }
@@ -714,7 +715,7 @@ function init() {
     }
     if (e.target.name === "payment") {
       const value = e.target.value;
-      payment = value === "transfer" || value === "card" ? value : "cash";
+      payment = value === "card" ? "card" : "cash";
       $("#formError").hidden = true;
       $("#cardPayLink").hidden = true;
       syncPayment();

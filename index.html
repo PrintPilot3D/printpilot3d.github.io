@@ -162,7 +162,7 @@
       <li><span>1</span><h3>Add to cart</h3><p>Pick the prints you want. Your cart stays saved on this device.</p></li>
       <li><span>2</span><h3>Send your order</h3><p>Choose pickup or delivery in Dubai, add your details, then tap WhatsApp. The message lists your items, the fee, and the AED total.</p></li>
       <li><span>3</span><h3>The shop confirms</h3><p>You’ll get a reply on WhatsApp to confirm the order and the handover.</p></li>
-      <li><span>4</span><h3>Pay when you get it</h3><p>Pay by cash or bank transfer. Pickup is free. Delivery in Dubai adds the fee shown in the cart.</p></li>
+      <li><span>4</span><h3>Pay when you get it</h3><p>Pay by cash, or by card. Pickup is free. Delivery in Dubai adds the fee shown in the cart.</p></li>
     </ol>
   </div>
 </section>
@@ -220,13 +220,9 @@
         <input type="radio" name="payment" value="cash" checked>
         <span><strong>Cash on pickup or delivery</strong></span>
       </label>
-      <label class="ship-option">
-        <input type="radio" name="payment" value="transfer">
-        <span><strong>Bank transfer</strong><small>We'll send bank details on WhatsApp after you order</small></span>
-      </label>
-      <label class="ship-option" id="cardOption" hidden>
+      <label class="ship-option" id="cardOption">
         <input type="radio" name="payment" value="card">
-        <span><strong>Card payment online</strong><small>A pay button appears after you send the order</small></span>
+        <span><strong>Pay with credit card</strong><small id="cardOptionNote">We'll send you a secure card payment link on WhatsApp.</small></span>
       </label>
     </fieldset>
     <label>Name
@@ -243,6 +239,9 @@
         <input id="buildingInput" name="building" maxlength="120" autocomplete="address-line1" placeholder="Building, villa, and apartment">
       </label>
     </div>
+    <label>Address
+      <input id="addressInput" name="address" maxlength="120" autocomplete="street-address" placeholder="Full address">
+    </label>
     <label>Notes
       <textarea name="notes" maxlength="300" rows="2" placeholder="Colour, gate, floor, or anything else"></textarea>
     </label>

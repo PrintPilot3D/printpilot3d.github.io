@@ -8,15 +8,15 @@ Orders always open `https://wa.me/971507591359`. That number is `WHATSAPP_NUMBER
 
 ## Payment link
 
-`CARD_PAYMENT_LINK` in `script.js` starts as `""`. Leave it empty and the card choice stays hidden.
+`CARD_PAYMENT_LINK` in `script.js` starts as `""`. "Pay with credit card" is still shown. With the link empty, the shop sends a secure card-payment link on WhatsApp after the order.
 
-To turn card payment on, paste one `https://` link from a site on this list:
+To also show a Pay by card button, paste one `https://` link from a site on this list:
 
 - `ziina.com`, `pay.ziina.com`, and other subdomains of `ziina.com`
 - `buy.stripe.com`
 - `checkout.stripe.com`
 
-Any other link is ignored. The card choice stays hidden, and the browser console shows a warning. Do not put bank account numbers, card numbers, or passwords in the site.
+Any other link is ignored, and the browser console shows a warning. Do not put bank account numbers, card numbers, or passwords in the site.
 
 ## Deploy check
 
