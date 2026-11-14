@@ -2,6 +2,7 @@
    SHOP SETTINGS — edit these first
    ===================================================================== */
 const WHATSAPP_NUMBER = "971507591359";
+const ORDER_EMAIL = "printpilot3d123@gmail.com";
 const SHOP = {
   name: "Print Pilot 3D",   // also used in the page title
   whatsapp: "971507591359", // must stay 971507591359. Orders always use this number.
@@ -573,35 +574,90 @@ function showWhatsApp(linkId, text) {
   window.open(url, "_blank", "noopener,noreferrer");
   return url;
 }
+function orderLines() {
+  return cartLines().map(({ p, qty }) =>
+    `${qty} x ${p.name} (${p.category}, ${p.colour}) at ${money(priceOf(p))} each - ${money(priceOf(p) * qty)}`);
+}
+function amountNumber(n) {
+  return money(n).replace(new RegExp(` ${SHOP.currency}$`), "");
+}
 function buildOrderMessage(data) {
-  const lines = cartLines();
+  const subtotal = cartTotal();
   const fee = currentFee();
-  const itemLines = lines.map(({ p, qty }) =>
-    `• ${qty} x ${p.name} (${p.category}, ${p.colour}) at ${money(priceOf(p))} each - ${money(priceOf(p) * qty)}`);
+  const total = subtotal + fee;
+  const card = chosenPayment() === "card";
   const parts = [
-    `Hi! I'd like to order from ${SHOP.name}:`,
+    "What they bought",
+    ...orderLines().map((line) => `• ${line}`),
     "",
-    ...itemLines,
-    "",
-    `Subtotal: ${money(cartTotal())}`,
-    `Option: ${optionLabel()}`,
+    `Total to pay: ${money(total)}`,
+    `Subtotal: ${money(subtotal)}`,
     `Delivery fee: ${money(fee)}`,
-    `Total: ${money(cartTotal() + fee)}`,
-    `Payment: ${paymentLabel()}`,
+    `Amount due: ${money(total)}`,
+    `Payment method: ${paymentLabel()}`,
+  ];
+  if (card) parts.push("Check Ziina to confirm card payment");
+  parts.push(
+    "",
+    `Pickup or delivery: ${optionLabel()}`,
     "",
     `Name: ${data.name}`,
     `Phone: ${data.phone}`,
-  ];
-  if (fulfillment === "delivery") {
-    parts.push(`Area: ${data.area}`);
-    parts.push(`Building / villa: ${data.building}`);
-  }
-  if (data.address) parts.push(`Address: ${data.address}`);
-  if (data.notes) parts.push(`Notes: ${data.notes}`);
-  if (lines.some(({ p }) => p.example)) {
+    `Address: ${data.address || "—"}`,
+    `Area: ${data.area || "—"}`,
+    `Building / villa: ${data.building || "—"}`,
+    `Notes: ${data.notes || "—"}`,
+  );
+  if (cartLines().some(({ p }) => p.example)) {
     parts.push("", "Some of these are still example products on the website.");
   }
   return parts.join("\n");
+}
+function orderEmailPayload(data) {
+  const subtotal = cartTotal();
+  const fee = currentFee();
+  const total = subtotal + fee;
+  const card = chosenPayment() === "card";
+  const payload = {
+    _subject: `New Print Pilot 3D order - ${data.name} - ${amountNumber(total)} AED`,
+    _template: "table",
+    _captcha: "false",
+    "What they bought": orderLines().join("\n"),
+    "Total to pay": money(total),
+    Subtotal: money(subtotal),
+    "Delivery fee": money(fee),
+    "Amount due": money(total),
+    "Payment method": paymentLabel(),
+  };
+  if (card) payload["Check Ziina to confirm card payment"] = "The website has not confirmed this card payment.";
+  payload["Pickup or delivery"] = optionLabel();
+  payload.Name = data.name;
+  payload.Phone = data.phone;
+  payload.Address = data.address || "—";
+  payload.Area = data.area || "—";
+  payload["Building / villa"] = data.building || "—";
+  payload.Notes = data.notes || "—";
+  return payload;
+}
+function sendOrderEmail(data) {
+  if (ORDER_EMAIL !== "printpilot3d123@gmail.com") {
+    console.warn("ORDER_EMAIL is not printpilot3d123@gmail.com. The order email was not sent.");
+    return;
+  }
+  fetch("https://formsubmit.co/ajax/" + ORDER_EMAIL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(orderEmailPayload(data)),
+  }).then((res) => {
+    if (!res.ok) console.warn("Order email was not sent (" + res.status + ").");
+    return res.json().catch(() => null);
+  }).then((body) => {
+    if (body && String(body.success) !== "true") {
+      console.warn("Order email was not accepted.", body.message || "");
+    }
+  }).catch(() => {
+    console.warn("Order email was not sent.");
+  });
 }
 function buildCustomMessage(data) {
   const parts = [
@@ -633,6 +689,7 @@ function handleCheckout(e) {
     return;
   }
   err.hidden = true;
+  sendOrderEmail(data);
   showWhatsApp("#orderWaLink", buildOrderMessage(data));
   const cardButton = $("#cardPayLink");
   const link = chosenPayment() === "card" ? cardPaymentLink() : "";

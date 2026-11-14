@@ -25,6 +25,9 @@ if (expected !== "971507591359") {
 if (!hosts.includes("buy.stripe.com") || !hosts.includes("checkout.stripe.com") || !hosts.includes("ziina.com")) {
   fail("security-fingerprint.json payment allowlist is missing ziina.com, buy.stripe.com, or checkout.stripe.com.");
 }
+if (!fingerprint || fingerprint.orderEmail !== "printpilot3d123@gmail.com") {
+  fail("security-fingerprint.json orderEmail must be exactly printpilot3d123@gmail.com.");
+}
 
 const script = read("script.js");
 const html = read("index.html");
@@ -36,6 +39,19 @@ if (numberConstants.length !== 1 || numberConstants[0][1] !== "971507591359") {
 const shopNumbers = [...script.matchAll(/whatsapp:\s*["'](\d+)["']/g)];
 if (shopNumbers.length !== 1 || shopNumbers[0][1] !== "971507591359") {
   fail('SHOP.whatsapp must be exactly "971507591359".');
+}
+const emailConstants = [...script.matchAll(/const\s+ORDER_EMAIL\s*=\s*["']([^"']+)["']/g)];
+if (emailConstants.length !== 1 || emailConstants[0][1] !== "printpilot3d123@gmail.com") {
+  fail('ORDER_EMAIL must be exactly "printpilot3d123@gmail.com".');
+}
+const otherEmails = [...script.matchAll(/formsubmit\.co\/ajax\/([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)/g)];
+for (const match of otherEmails) {
+  if (match[1] !== "printpilot3d123@gmail.com") {
+    fail(`formsubmit.co is used with ${match[1]} instead of printpilot3d123@gmail.com.`);
+  }
+}
+if (!script.includes('formsubmit.co/ajax/" + ORDER_EMAIL') && !script.includes("formsubmit.co/ajax/printpilot3d123@gmail.com")) {
+  fail("Orders must be emailed through https://formsubmit.co/ajax/ using ORDER_EMAIL.");
 }
 
 function checkWa(source, file) {
@@ -98,6 +114,12 @@ if (!csp) {
   const content = (csp[0].match(/\bcontent\s*=\s*"([^"]*)"/i) || [])[1] || "";
   if (!/default-src\s+'self'/.test(content) || !/object-src\s+'none'/.test(content)) {
     fail("The Content-Security-Policy meta tag is present but does not lock default-src to 'self' and object-src to 'none'.");
+  }
+  const connect = content.split(";").map((part) => part.trim()).find((part) => part.startsWith("connect-src"));
+  const tokens = connect ? connect.replace(/^connect-src\s+/, "").split(/\s+/).filter(Boolean) : [];
+  const allowed = ["'self'", "https://formsubmit.co"];
+  if (!connect || tokens.length !== allowed.length || allowed.some((token) => !tokens.includes(token))) {
+    fail("CSP connect-src must allow only 'self' and https://formsubmit.co. Found: " + (tokens.join(" ") || "(missing)"));
   }
 }
 

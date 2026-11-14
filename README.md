@@ -39,7 +39,7 @@ The Dubai delivery fee is the `DELIVERY_FEE` number near the top of `script.js`.
 
 Reviews live in the `REVIEWS` array in `script.js`. Leave it empty until a customer really writes one. The YouTube button stays hidden while `YOUTUBE_LINK` is `""`. Paste a YouTube link there to show it.
 
-Orders and custom print requests open WhatsApp. There is no email contact on this site.
+Orders and custom print requests open WhatsApp. Each order is also emailed to `ORDER_EMAIL` (`printpilot3d123@gmail.com`) through FormSubmit. Do not change that address. There is no email address shown on the site for customers to write to.
 
 ## Files
 

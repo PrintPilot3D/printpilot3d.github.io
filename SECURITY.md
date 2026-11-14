@@ -6,6 +6,8 @@ This shop is a static site. It does not take card details itself. Orders are sen
 
 Orders always open `https://wa.me/971507591359`. That number is `WHATSAPP_NUMBER` in `script.js`, and it is also listed in `security-fingerprint.json`. Do not change it. The deploy check refuses any other number.
 
+A copy of each order is also emailed to `printpilot3d123@gmail.com` through FormSubmit. That address is `ORDER_EMAIL` in `script.js`. Do not change it. The page may only connect to this site and `https://formsubmit.co`.
+
 ## Payment link
 
 `CARD_PAYMENT_LINK` in `script.js` starts as `""`. "Pay with credit card" is still shown. With the link empty, the shop sends a secure card-payment link on WhatsApp after the order.
