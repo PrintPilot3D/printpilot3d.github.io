@@ -36,7 +36,7 @@ const CARD_PAYMENT_LINK = "";
    https://www.youtube.com/@yourchannel
    The button opens in a new tab.
    ===================================================================== */
-const YOUTUBE_LINK = "";
+const YOUTUBE_LINK = "https://www.youtube.com/@PrintPilot3D-p1t/shorts";
 
 /* =====================================================================
    PRODUCTS — the prints for sale
