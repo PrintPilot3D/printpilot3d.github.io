@@ -246,7 +246,11 @@
     <p class="form-error" id="formError" hidden></p>
     <button type="submit" class="btn btn-wa">Order on WhatsApp</button>
     <a id="orderWaLink" class="fallback" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp did not open? Tap here to send the message.</a>
-    <a id="cardPayLink" class="btn btn-primary" target="_blank" rel="noopener noreferrer" hidden>Pay by card</a>
+    <div id="cardPaySection" hidden>
+      <h3>Pay by card</h3>
+      <div id="cardPayButtons"></div>
+      <p id="cardPayNote" class="small muted" hidden></p>
+    </div>
     <button type="button" class="link-btn" id="clearCart">Clear cart</button>
     <a class="link-btn" href="#custom" id="customFromCart">Custom print request</a>
   </form>

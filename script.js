@@ -70,6 +70,9 @@ const YOUTUBE_LINK = "https://www.youtube.com/@PrintPilot3D-p1t/shorts";
    image2    – optional second photo, like "images/phone-stand-front.jpg".
                It shows when someone hovers or taps the picture.
                Leave it out if you only have one photo.
+   payLink   – optional card payment link for one item, with no ?source=app.
+               Only https links on ziina.com (including pay.ziina.com) or
+               buy.stripe.com / checkout.stripe.com are used.
    blurb     – one short sentence about the print
    example   – true shows an EXAMPLE label.
                Change it to false when this is a real print you are selling.
@@ -92,6 +95,7 @@ const PRODUCTS = [
     icon: "stand",
     image: "images/phone-stand-side.jpg",
     image2: "images/phone-stand-front.jpg",
+    payLink: "https://pay.ziina.com/printpilot3d123/xq42IzonC",
     blurb: "Holds a phone upright on a desk.",
     example: false,
   },
@@ -104,6 +108,7 @@ const PRODUCTS = [
     stock: 4,
     icon: "cube",
     image: "images/spiral-cone-fidget.jpg",
+    payLink: "https://pay.ziina.com/printpilot3d123/HFqSLSHlD",
     blurb: "A satisfying 3D-printed spiral fidget toy. The inner cone twists through the outer spiral.",
     example: false,
   },
@@ -368,16 +373,44 @@ function paymentHostAllowed(hostname) {
   if (host === "ziina.com" || host.endsWith(".ziina.com")) return true;
   return host === "buy.stripe.com" || host === "checkout.stripe.com";
 }
-function cardPaymentLink() {
-  const raw = String(CARD_PAYMENT_LINK || "").trim();
-  if (!raw) return "";
+function validPayUrl(raw) {
+  const value = String(raw || "").trim();
+  if (!value) return "";
   let parsed;
-  try { parsed = new URL(raw); } catch { parsed = null; }
+  try { parsed = new URL(value); } catch { parsed = null; }
   if (!parsed || parsed.protocol !== "https:" || !paymentHostAllowed(parsed.hostname)) {
-    console.warn("CARD_PAYMENT_LINK was ignored. Use an https link on ziina.com, pay.ziina.com, buy.stripe.com, or checkout.stripe.com.");
+    console.warn("A card payment link was ignored. Use https on ziina.com, pay.ziina.com, buy.stripe.com, or checkout.stripe.com.");
     return "";
   }
-  return raw;
+  if (parsed.searchParams.get("source") === "app") parsed.searchParams.delete("source");
+  const query = parsed.searchParams.toString();
+  return parsed.origin + parsed.pathname + (query ? "?" + query : "") + parsed.hash;
+}
+function cardPaymentLink() {
+  return validPayUrl(CARD_PAYMENT_LINK);
+}
+function itemPayLink(p) {
+  return validPayUrl(p && p.payLink) || cardPaymentLink();
+}
+function cardPayItems() {
+  const rows = [];
+  for (const { p, qty } of cartLines()) {
+    const href = itemPayLink(p);
+    for (let i = 1; i <= qty; i += 1) {
+      rows.push({
+        label: `Pay ${money(priceOf(p))} - ${p.name} (${i} of ${qty})`,
+        href,
+      });
+    }
+  }
+  return rows;
+}
+function cardPayNoteText() {
+  return `Delivery fee (${money(feeAmount())}) and any items without a card link: we'll send you a card link on WhatsApp or you can pay cash.`;
+}
+function cardPayNoteNeeded() {
+  const missing = cartLines().some(({ p }) => !itemPayLink(p));
+  return fulfillment === "delivery" || missing;
 }
 function chosenPayment() {
   return payment === "card" ? "card" : "cash";
@@ -597,6 +630,14 @@ function buildOrderMessage(data) {
     `Payment method: ${paymentLabel()}`,
   ];
   if (card) parts.push("Check Ziina to confirm card payment");
+  if (card) {
+    const links = cardPayItems().filter((row) => row.href);
+    parts.push("", "Card payment links");
+    if (links.length) {
+      for (const row of links) parts.push(`${row.label}: ${row.href}`);
+    }
+    if (cardPayNoteNeeded()) parts.push(cardPayNoteText());
+  }
   parts.push(
     "",
     `Pickup or delivery: ${optionLabel()}`,
@@ -630,6 +671,12 @@ function orderEmailPayload(data) {
     "Payment method": paymentLabel(),
   };
   if (card) payload["Check Ziina to confirm card payment"] = "The website has not confirmed this card payment.";
+  if (card) {
+    const links = cardPayItems().filter((row) => row.href);
+    const lines = links.map((row) => `${row.label}: ${row.href}`);
+    if (cardPayNoteNeeded()) lines.push(cardPayNoteText());
+    payload["Card payment links"] = lines.join("\n") || "—";
+  }
   payload["Pickup or delivery"] = optionLabel();
   payload.Name = data.name;
   payload.Phone = data.phone;
@@ -691,16 +738,31 @@ function handleCheckout(e) {
   err.hidden = true;
   sendOrderEmail(data);
   showWhatsApp("#orderWaLink", buildOrderMessage(data));
-  const cardButton = $("#cardPayLink");
-  const link = chosenPayment() === "card" ? cardPaymentLink() : "";
-  if (link) {
-    setExternal(cardButton, link);
-    cardButton.hidden = false;
-  } else {
-    cardButton.hidden = true;
-    cardButton.removeAttribute("href");
-  }
+  showCardPayments();
   toast("Order message ready — just hit send");
+}
+function showCardPayments() {
+  const section = $("#cardPaySection");
+  const box = $("#cardPayButtons");
+  const note = $("#cardPayNote");
+  if (!section || !box || !note) return;
+  box.replaceChildren();
+  if (chosenPayment() !== "card") {
+    section.hidden = true;
+    return;
+  }
+  for (const row of cardPayItems()) {
+    if (!row.href) continue;
+    const link = document.createElement("a");
+    link.className = "btn btn-primary";
+    link.textContent = row.label;
+    setExternal(link, row.href);
+    box.appendChild(link);
+  }
+  const needed = cardPayNoteNeeded();
+  note.hidden = !needed;
+  if (needed) note.textContent = cardPayNoteText();
+  section.hidden = false;
 }
 function handleCustom(e) {
   e.preventDefault();
@@ -774,7 +836,8 @@ function init() {
       const value = e.target.value;
       payment = value === "card" ? "card" : "cash";
       $("#formError").hidden = true;
-      $("#cardPayLink").hidden = true;
+      const section = $("#cardPaySection");
+      if (section) section.hidden = true;
       syncPayment();
     }
   });

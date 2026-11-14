@@ -7,5 +7,9 @@
     "pay.ziina.com",
     "buy.stripe.com",
     "checkout.stripe.com"
-  ]
+  ],
+  "payLinks": {
+    "phone-stand": "https://pay.ziina.com/printpilot3d123/xq42IzonC",
+    "spiral-cone-fidget": "https://pay.ziina.com/printpilot3d123/HFqSLSHlD"
+  }
 }

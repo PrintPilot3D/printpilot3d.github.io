@@ -54,6 +54,44 @@ if (!script.includes('formsubmit.co/ajax/" + ORDER_EMAIL') && !script.includes("
   fail("Orders must be emailed through https://formsubmit.co/ajax/ using ORDER_EMAIL.");
 }
 
+function hostAllowed(hostname) {
+  const host = String(hostname || "").toLowerCase();
+  return hosts.some((rule) => {
+    if (rule.startsWith("*.")) {
+      const base = rule.slice(2).toLowerCase();
+      return host === base || host.endsWith("." + base);
+    }
+    return host === String(rule).toLowerCase();
+  });
+}
+function payUrlAllowed(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && hostAllowed(url.hostname);
+  } catch {
+    return false;
+  }
+}
+const foundPayLinks = [...script.matchAll(/payLink:\s*["']([^"']+)["']/g)].map((match) => match[1]);
+for (const value of foundPayLinks) {
+  if (!payUrlAllowed(value)) {
+    fail(`payLink "${value}" is not an https link on the allowlist (ziina.com and its subdomains, buy.stripe.com, checkout.stripe.com).`);
+  }
+}
+const expectedLinks = (fingerprint && fingerprint.payLinks) || {};
+for (const [id, url] of Object.entries(expectedLinks)) {
+  const idAt = script.search(new RegExp(`id:\\s*["']${id}["']`));
+  if (idAt < 0) {
+    fail(`Expected product ${id} is missing, so its card link cannot be checked.`);
+    continue;
+  }
+  const block = script.slice(idAt, script.indexOf("\n  }", idAt));
+  const link = block.match(/payLink:\s*["']([^"']+)["']/);
+  if (!link || link[1] !== url) {
+    fail(`payLink for ${id} must stay ${url}.`);
+  }
+}
+
 function checkWa(source, file) {
   for (const match of source.matchAll(/wa\.me\/(\d+)/g)) {
     if (match[1] !== "971507591359") {
@@ -66,17 +104,6 @@ function checkWa(source, file) {
 }
 checkWa(script, "script.js");
 checkWa(html, "index.html");
-
-function hostAllowed(hostname) {
-  const host = String(hostname || "").toLowerCase();
-  return hosts.some((rule) => {
-    if (rule.startsWith("*.")) {
-      const base = rule.slice(2).toLowerCase();
-      return host === base || host.endsWith("." + base);
-    }
-    return host === String(rule).toLowerCase();
-  });
-}
 
 const payment = script.match(/const\s+CARD_PAYMENT_LINK\s*=\s*(["'`])([\s\S]*?)\1/);
 if (!payment) {

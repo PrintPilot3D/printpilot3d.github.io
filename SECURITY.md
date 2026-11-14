@@ -18,7 +18,7 @@ To also show a Pay by card button, paste one `https://` link from a site on this
 - `buy.stripe.com`
 - `checkout.stripe.com`
 
-Any other link is ignored, and the browser console shows a warning. Do not put bank account numbers, card numbers, or passwords in the site.
+Any other link is ignored, and the browser console shows a warning. A product can also have its own `payLink` for one item. Those links must be on the same list, and the two current links are fixed in `security-fingerprint.json`. Do not put bank account numbers, card numbers, or passwords in the site.
 
 ## Deploy check
 

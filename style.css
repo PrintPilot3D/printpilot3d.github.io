@@ -462,8 +462,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .order-form h3 { margin: 0; }
 .form-error { color: var(--magenta-d); margin: 0; font-size: .9rem; font-weight: 600; }
 .fallback { font-size: .9rem; font-weight: 600; color: var(--cyan-d); }
-#cardPayLink { width: 100%; }
-#cardPayLink[hidden] { display: none; }
+#cardPaySection { display: grid; gap: 8px; }
+#cardPaySection[hidden] { display: none; }
+#cardPayButtons { display: grid; gap: 8px; }
+#cardPayButtons .btn { width: 100%; }
+#cardPayNote { margin: 0; }
 .link-btn {
   background: none;
   border: 0;
