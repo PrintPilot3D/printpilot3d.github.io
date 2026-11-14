@@ -257,8 +257,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .art svg, .ci-thumb svg { width: 100%; height: auto; display: block; }
 .art img.photo, .ci-thumb img.photo { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 .thumb.has-photo { padding: 0; align-items: stretch; }
-.thumb.has-photo .art { width: 100%; height: 100%; margin: 0; }
+.thumb.has-photo .art { position: relative; width: 100%; height: 100%; margin: 0; }
 .thumb.has-photo .art img.photo { border-radius: 0; }
+.thumb .photo-alt { position: absolute; inset: 0; opacity: 0; }
+.thumb:hover .photo-alt,
+.thumb.show-alt .photo-alt { opacity: 1; }
 .ci-thumb.has-photo { padding: 0; overflow: hidden; }
 .ci-thumb.has-photo img.photo { border-radius: 10px; }
 .tag {

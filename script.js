@@ -63,6 +63,9 @@ const YOUTUBE_LINK = "https://www.youtube.com/@PrintPilot3D-p1t/shorts";
                   image: "images/headphone-stand.jpg",
                The photo then replaces the drawing. Use a picture you took.
                Do not use brand logos.
+   image2    – optional second photo, like "images/phone-stand-front.jpg".
+               It shows when someone hovers or taps the picture.
+               Leave it out if you only have one photo.
    blurb     – one short sentence about the print
    example   – true shows an EXAMPLE label.
                Change it to false when this is a real print you are selling.
@@ -79,10 +82,12 @@ const PRODUCTS = [
     id: "phone-stand",
     name: "Phone Stand",
     category: "Desk",
-    colour: "Cyan",
+    colour: "Black",
     price: 20,
     stock: 6,
     icon: "stand",
+    image: "images/phone-stand-side.jpg",
+    image2: "images/phone-stand-front.jpg",
     blurb: "Holds a phone upright on a desk.",
     example: false,
   },
@@ -276,16 +281,22 @@ function categoryClass(category) {
 function iconSvg(name) {
   return ICONS[name] || ICONS.cube;
 }
-function productImage(p) {
-  const src = String(p && p.image || "").trim();
-  if (!src || /[\s"'<>]/.test(src)) return "";
-  if (/^[a-z][a-z0-9+.-]*:/i.test(src) || src.startsWith("//")) return "";
-  return src;
+function safeImage(src) {
+  const s = String(src || "").trim();
+  if (!s || /[\s"'<>]/.test(s)) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(s) || s.startsWith("//")) return "";
+  return s;
 }
-function productArt(p) {
+function productImage(p) {
+  return safeImage(p && p.image);
+}
+function productArt(p, swap) {
   const src = productImage(p);
   if (!src) return iconSvg(p.icon);
-  return `<img class="photo" src="${esc(src)}" alt="">`;
+  const main = `<img class="photo" src="${esc(src)}" alt="">`;
+  const extra = swap ? safeImage(p && p.image2) : "";
+  if (!extra) return main;
+  return main + `<img class="photo photo-alt" src="${esc(extra)}" alt="">`;
 }
 
 let fulfillment = "pickup";
@@ -433,9 +444,9 @@ function renderGrid() {
     const sold = stockOf(p) <= 0;
     return `
     <article class="product" data-id="${esc(p.id)}">
-      <div class="thumb ${categoryClass(p.category)}${productImage(p) ? " has-photo" : ""}">
+      <div class="thumb ${categoryClass(p.category)}${productImage(p) ? " has-photo" : ""}${safeImage(p.image2) ? " has-swap" : ""}">
         ${p.example ? '<span class="tag">EXAMPLE</span>' : ""}
-        <div class="art">${productArt(p)}</div>
+        <div class="art">${productArt(p, true)}</div>
       </div>
       <div class="p-body">
         <h3>${esc(p.name)}</h3>
@@ -656,6 +667,8 @@ function init() {
     $(sel).addEventListener("change", renderGrid);
   });
   $("#grid").addEventListener("click", (e) => {
+    const thumb = e.target.closest(".thumb.has-swap");
+    if (thumb && !e.target.closest("button")) thumb.classList.toggle("show-alt");
     const id = e.target.closest("[data-add]")?.dataset.add;
     if (id) addToCart(id);
   });
