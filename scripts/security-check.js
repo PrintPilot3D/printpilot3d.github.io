@@ -125,8 +125,10 @@ const scriptTags = [...html.matchAll(/<script\b[^>]*>/gi)];
 if (scriptTags.length === 0) fail("index.html has no script tag.");
 for (const tag of scriptTags) {
   const src = tag[0].match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+  const type = (tag[0].match(/\btype\s*=\s*["']([^"']+)["']/i) || [])[1] || "";
   if (!src) {
-    fail("index.html has a script tag without a local src. Inline scripts are not allowed.");
+    if (type.toLowerCase() === "application/ld+json") continue;
+    fail("index.html has an inline script. Only application/ld+json data is allowed.");
     continue;
   }
   if (/^[a-z][a-z0-9+.-]*:/i.test(src[1]) || src[1].startsWith("//")) {

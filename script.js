@@ -94,7 +94,9 @@ const PRODUCTS = [
     stock: 6,
     icon: "stand",
     image: "images/phone-stand-side.jpg",
+    imageAlt: "Black 3D-printed phone stand, side view",
     image2: "images/phone-stand-front.jpg",
+    image2Alt: "Black 3D-printed phone stand, front view",
     payLink: "https://pay.ziina.com/printpilot3d123/xq42IzonC",
     blurb: "Holds a phone upright on a desk.",
     example: false,
@@ -108,6 +110,7 @@ const PRODUCTS = [
     stock: 4,
     icon: "cube",
     image: "images/spiral-cone-fidget.jpg",
+    imageAlt: "Black and white 3D-printed spiral cone fidget toy",
     payLink: "https://pay.ziina.com/printpilot3d123/HFqSLSHlD",
     blurb: "A satisfying 3D-printed spiral fidget toy. The inner cone twists through the outer spiral.",
     example: false,
@@ -290,10 +293,12 @@ function productImage(p) {
 function productArt(p, swap) {
   const src = productImage(p);
   if (!src) return iconSvg(p.icon);
-  const main = `<img class="photo" src="${esc(src)}" alt="">`;
+  const mainAlt = p.imageAlt || `${p.name}, ${p.colour}`;
+  const main = `<img class="photo" src="${esc(src)}" alt="${esc(mainAlt)}">`;
   const extra = swap ? safeImage(p && p.image2) : "";
   if (!extra) return main;
-  return main + `<img class="photo photo-alt" src="${esc(extra)}" alt="">`;
+  const extraAlt = p.image2Alt || `${p.name}, another view`;
+  return main + `<img class="photo photo-alt" src="${esc(extra)}" alt="${esc(extraAlt)}">`;
 }
 
 let fulfillment = "pickup";
@@ -784,7 +789,7 @@ function toast(msg) {
 }
 
 function init() {
-  document.title = `${SHOP.name} – 3D prints in Dubai`;
+  document.title = "Print Pilot 3D | 3D Printed Fidgets & Phone Stands in Dubai, UAE";
   document.querySelectorAll("[data-shop-name]").forEach((el) => { el.textContent = SHOP.name; });
   $("#year").textContent = String(new Date().getFullYear());
   $("#exampleBanner").hidden = !PRODUCTS.some((p) => p.example);

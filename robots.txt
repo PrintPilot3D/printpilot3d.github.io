@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://printpilot3d.github.io/sitemap.xml
