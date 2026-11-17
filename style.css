@@ -307,10 +307,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .stars { margin: 0 0 8px; color: #7a5b00; letter-spacing: .08em; font-size: 1.05rem; }
 
 /* Picture backgrounds. The class is "t-" plus the category in lowercase.
-   Desk, Tech, Fidget, Cables, Gifts, and Home are ready. A new category uses purple
+   Desk, Tech, Fidget, Figure, Cables, Gifts, and Home are ready. A new category uses purple
    unless you add a matching rule here. */
 .t-desk { background: linear-gradient(135deg, #c8f6fb, #14c4d4); }
 .t-fidget { background: linear-gradient(135deg, #f7f7f8, #2c2c33); }
+.t-figure { background: linear-gradient(135deg, #ffe8c7, #ff8a3d); }
 .t-tech { background: linear-gradient(135deg, #ddd6ff, #6d56e8); }
 .t-cables { background: linear-gradient(135deg, #ffe0c2, #ff8a3d); }
 .t-gifts { background: linear-gradient(135deg, #ffd0e2, #ff4d8d); }
