@@ -193,6 +193,20 @@ const PRODUCTS = [
     blurb: "A hexagon spiral fidget that pops up into a cone when you push the middle.",
     example: false,
   },
+  {
+    id: "custom-qr-code-stand",
+    name: "Custom QR Code Stand",
+    category: "Custom",
+    colour: "White",
+    price: 20,
+    stock: 4,
+    icon: "cube",
+    image: "images/custom-qr-code-stand-1.jpg",
+    imageAlt: "White 3D-printed stand with a black QR code and a small globe",
+    payLink: "https://pay.ziina.com/printpilot3d123/xq42IzonC",
+    blurb: "Your own QR code 3D-printed on a stand, with any logo you want. Great for shops, socials, Wi-Fi or a website.",
+    example: false,
+  },
 ];
 
 /* =====================================================================
@@ -632,6 +646,11 @@ function renderCart() {
   $("#areaInput").required = delivering;
   $("#buildingInput").required = delivering;
   $("#addressInput").required = delivering;
+  const wantsQr = lines.some(({ p }) => p.id === "custom-qr-code-stand");
+  const qrFields = $("#qrFields");
+  if (qrFields) qrFields.hidden = !wantsQr;
+  const qrInput = $("#qrInput");
+  if (qrInput) qrInput.required = wantsQr;
   const optionName = $("#deliveryOptionName");
   if (optionName) optionName.textContent = `Delivery in Dubai (+${money(feeAmount())})`;
   syncPayment();
@@ -662,12 +681,13 @@ function openCart(open) {
 function stripMarkup(value) {
   return String(value ?? "").replace(/\0/g, "").replace(/<[^>]*>/g, "").replace(/[<>]/g, "");
 }
-function cleanField(value, multiline) {
+function cleanField(value, multiline, max) {
   let text = stripMarkup(value);
   text = multiline
     ? text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
     : text.replace(/[\u0000-\u001F\u007F]/g, " ");
-  return text.trim().slice(0, multiline ? 400 : 120);
+  const limit = max || (multiline ? 400 : 120);
+  return text.trim().slice(0, limit);
 }
 function waLink(text) {
   if (SHOP.whatsapp !== WHATSAPP_NUMBER || WHATSAPP_NUMBER !== "971507591359") {
@@ -732,6 +752,13 @@ function buildOrderMessage(data) {
     `Building / villa: ${data.building || "—"}`,
     `Notes: ${data.notes || "—"}`,
   );
+  if (cartLines().some(({ p }) => p.id === "custom-qr-code-stand")) {
+    parts.push(
+      `QR code link: ${data.qr || "—"}`,
+      `Logo / colours: ${data.logo || "—"}`,
+      "Send your logo image to us on WhatsApp after ordering.",
+    );
+  }
   if (cartLines().some(({ p }) => p.example)) {
     parts.push("", "Some of these are still example products on the website.");
   }
@@ -767,6 +794,11 @@ function orderEmailPayload(data) {
   payload.Area = data.area || "—";
   payload["Building / villa"] = data.building || "—";
   payload.Notes = data.notes || "—";
+  if (cartLines().some(({ p }) => p.id === "custom-qr-code-stand")) {
+    payload["QR code link"] = data.qr || "—";
+    payload["Logo / colours"] = data.logo || "—";
+    payload["Logo image"] = "Send your logo image to us on WhatsApp after ordering.";
+  }
   return payload;
 }
 function sendOrderEmail(data) {
@@ -803,7 +835,8 @@ function buildCustomMessage(data) {
 function readForm(form) {
   const data = Object.fromEntries(new FormData(form));
   const multiline = new Set(["notes", "idea"]);
-  for (const key in data) data[key] = cleanField(data[key], multiline.has(key));
+  const limits = { qr: 200, logo: 80 };
+  for (const key in data) data[key] = cleanField(data[key], multiline.has(key), limits[key]);
   return data;
 }
 
@@ -815,6 +848,11 @@ function handleCheckout(e) {
   if (!data.name || !data.phone) { err.textContent = "Please add your name and phone."; err.hidden = false; return; }
   if (fulfillment === "delivery" && (!data.area || !data.building || !data.address)) {
     err.textContent = "Please add the area, the building or villa, and the address for delivery.";
+    err.hidden = false;
+    return;
+  }
+  if (cartLines().some(({ p }) => p.id === "custom-qr-code-stand") && !data.qr) {
+    err.textContent = "Please add the link the QR code should open.";
     err.hidden = false;
     return;
   }

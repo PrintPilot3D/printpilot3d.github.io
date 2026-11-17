@@ -138,6 +138,20 @@
         "availability": "https://schema.org/InStock",
         "url": "https://printpilot3d.github.io/"
       }
+    },
+    {
+      "@type": "Product",
+      "name": "Custom QR Code Stand",
+      "image": "https://printpilot3d.github.io/images/custom-qr-code-stand-1.jpg",
+      "description": "Your own QR code 3D-printed on a stand, with any logo you want. Great for shops, socials, Wi-Fi or a website.",
+      "brand": { "@type": "Brand", "name": "Print Pilot 3D" },
+      "offers": {
+        "@type": "Offer",
+        "price": "20",
+        "priceCurrency": "AED",
+        "availability": "https://schema.org/InStock",
+        "url": "https://printpilot3d.github.io/"
+      }
     }
   ]
 }
@@ -364,6 +378,15 @@
     <label>Address
       <input id="addressInput" name="address" maxlength="120" autocomplete="street-address" placeholder="Full address">
     </label>
+    <div id="qrFields" hidden>
+      <label>QR code link
+        <input id="qrInput" name="qr" maxlength="200" inputmode="url" placeholder="Website, Wi-Fi page, or social link">
+      </label>
+      <label>Logo / colours
+        <input id="logoInput" name="logo" maxlength="80" placeholder="Shop name or colours">
+      </label>
+      <p class="small muted">Send your logo image to us on WhatsApp after ordering.</p>
+    </div>
     <label>Notes
       <textarea name="notes" maxlength="300" rows="2" placeholder="Colour, gate, floor, or anything else"></textarea>
     </label>
